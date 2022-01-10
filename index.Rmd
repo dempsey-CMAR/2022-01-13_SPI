@@ -94,12 +94,6 @@ theme_set(theme_light())
 
 ```
 
-
-# BACKGROUND
-
-
----
-
 # Coastal Monitoring Program
 
 - High resolution monitoring of temperature & dissolved oxygen (some salinity)
