@@ -1,7 +1,7 @@
 ---
-title: "Application of coastal temperature regimens to inform selection of year-round and seasonal sites for Atlantic salmon culture"
+title: "Application of coastal temperature regimens to inform selection of year-round & seasonal sites for <br/> Atlantic salmon culture"
 subtitle: ""
-author: "Danielle Dempsey, Gregor Reid"
+author: "Danielle Dempsey, Gregor Reid, et al."
 institute: "CMAR"
 date: "`r Sys.Date()`"
 output:
@@ -14,13 +14,11 @@ output:
       countIncrementalSlides: false
       ratio: "16:9"
 ---
-
 layout: true
 
-background-image: url(logo.png)
+background-image: url(logo2.png)
 background-position: 50% 100%
 background-size: 100%
-
 ---
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
@@ -38,22 +36,30 @@ library(plotly)        # interactive figures
 library(readr)         # read in station locations
 library(strings)       # convert_depth_to_ordered_factor() function
 library(tgc)           # season functions
-library(xaringanthemer)
+library(xaringanthemer) # converts R code to css style sheet
 
-
+# slide formatting
 font_style <- "Kumbh Sans"
+# main_color <- "#2088e8"
+main_color <- "#04a4e4"
 
+# generates css style sheet (used to apply formatting to slides)
 style_mono_accent(
-  base_color = "#2088e8",
+  base_color = main_color,
+  
+  title_slide_text_color = main_color,
+  title_slide_background_color = "white",
+  
   header_font_google = google_font(font_style),
   text_font_google   = google_font(font_style, "300", "300i"),
   code_font_google   = google_font("Fira Mono"),
   header_h1_font_size = "2rem",
-  padding = "0px 64px 16px 64px",
-  text_font_size = "1.25rem"
+  text_font_size = "1.25rem",
+
+  padding = "0px 64px 16px 64px"
 )
 
-
+# DT options
 dt_options <- list(
       dom = 'ft',
       paging = FALSE,
@@ -94,9 +100,108 @@ theme_set(theme_light())
 
 ```
 
+
+# Motivation
+
+- Recent trend in Atlantic salmon aquaculture to stock large post-smolts (~ 1 kg) 
+--
+
+- Mainly to reduce disease potential 
+--
+
+- Could also enable grow-out to market size in less than a year
+--
+
+.pull-center[
+**Potential for novel sites in areas typically considered unsuitable for aquaculture**
+]
+
+???
+- I'll start with discussing the motivation for the paper, and then talk about the model we used before jumping into the results.
+
+- As you know, cultured salmon are grown on land in fresh water for the first part of their life, and then transferred to salt water farms when they become smolt.
+
+- Typically this happens when the smolt are about 100 to 150 g
+
+- There has been a recent trend in the industry to stock psot-smolts that are closer to 500 g or even a full 1 kg.
+
+- This strategy has primarily been implemented to reduce disease potential, and has also been used to reduce grow-out time.
+
+- Depending on local temperature and initial fish size, large post-smolt stocking could enable grow-out to target market weights in less than a year
+
+- Which could open up novel sites in areas that are typically considered unsuitable for aquaculture because they experience seasonal superchill.
+
+
+- Smolts are produced in freshwater land-based hatcheries 
+- Smoltification is when salmon change lifestages from being “parr” in freshwater to “smolts” adapted to saltwater.
+- This is now commonly done when the salmon reach about 100 to 150g after 8-10 months.
+
+Norway:
+Prior to January 2013, the maximum allowable juvenile weight was 250 g. In January 2013, this value was changed to 1 kg, increasing the flexibility of the production process. 
+
+- Larger smolts are increasingly popular in Norway, where licences for extra biomass are limited and expensive, in Tasmania, and to an increasing extent in Scotland.
+
+---
+# Thermal Growth Coefficient Model
+
+Relates initial weight and final weight based on the average temperature over a period of time
+
+$$
+w_0 = (w_t^{1/3} - \frac{TGC}{1000} * degreedays)^3
+$$
+
+$$degreedays = T_{Avg} * n_{days}$$
+--
+
+
+- $w_0$ = initial stocking weight (kg)
+- $w_t$ = final weight after grow-out (kg)
+- $TGC$ = thermal growth coefficient (remedial = 0.25, average = 0.30, elite = 0.35)
+- $degreedays$ = degree days experienced by fish over growing season
+- $T_{Avg}$ = average temperature over the growing season*
+- $n_{days}$ = number of days in the growing season*
+
+*Assume no growth for 24 hours after observation $\ge$ 18 degrees Celsius 
+
+---
+# Thermal Growth Coefficient Model
+
+How big does a post-smolt salmon need to be to grow out to market size at a given location?
+
+$$
+w_0 = (w_t^{1/3} - \frac{TGC}{1000} * degreedays)^3
+$$
+
+
+$$degreedays = T_{Avg} * n_{days}$$
+--
+
+- $w_0$ = initial stocking weight (kg)
+- $w_t$ = final weight after grow-out (kg)
+- $TGC$ = thermal growth coefficient (remedial = 0.25, average = 0.30, elite = 0.35)
+- $degreedays$ = degree days experienced by fish over growing season
+- $T_{Avg}$ = average temperature over the growing season*
+- $n_{days}$ = number of days in the growing season*
+
+
+
+*Assume no growth for 24 hours after observation $\ge$ 18 degrees Celsius 
+
+???
+
+ALT text: How big does a post-smolt salmon need to be to grow out to market size at a given location?
+
+
+- To explore this potential, we are using the thermal growth coefficient model
+
+- Common model that relates final weight and initial weight of a fish based on the average temperature it experiences over a given period of time
+
+(observations in this window are removed and not included in $T_{Avg}$ or $n_{days}$)
+
+---
 # Coastal Monitoring Program
 
-- High resolution monitoring of temperature & dissolved oxygen (some salinity)
+- High resolution monitoring of **temperature** (plus dissolved oxygen & some salinity)
 - Processed 190 deployments from 86 locations
 
 ```{r, echo=FALSE, fig.height=5.6}
