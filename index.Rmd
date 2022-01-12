@@ -1,9 +1,8 @@
 ---
 title: "Application of coastal temperature regimens to inform selection of year-round & seasonal sites for <br/> Atlantic salmon culture"
 subtitle: ""
-author: "Danielle Dempsey, Gregor Reid, et al."
-institute: "CMAR"
-date: "`r Sys.Date()`"
+author: "Danielle Dempsey, Gregor Reid, Ryan Horricks, Leah Lewis-McCrea, Toby Balch, Andre Dumas, Jack Rensel, Roland Cusack"
+date: "SPI: `r Sys.Date()`"
 output:
   xaringan::moon_reader:
     css: xaringan-themer.css
@@ -13,31 +12,33 @@ output:
       highlightLines: true
       countIncrementalSlides: false
       ratio: "16:9"
+editor_options: 
+  chunk_output_type: console
 ---
 layout: true
 
 background-image: url(logo2.png)
 background-position: 50% 100%
 background-size: 100%
+
 ---
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
 
 knitr::opts_chunk$set(echo=FALSE, fig.width=15, fig.retina=3, message=FALSE)
 
-library(dplyr)         # data manipulation 
-library(DT)            # interactive tables
-library(ggplot2)       # figures
-library(glue)
-library(here)
-library(leaflet)       # interactive map   
-library(lubridate)
-library(plotly)        # interactive figures
-library(readr)         # read in station locations
-library(strings)       # convert_depth_to_ordered_factor() function
-library(tgc)           # season functions
-library(xaringanExtra)  # for tabs in slides
-library(xaringanthemer) # converts R code to css style sheet
+library(dplyr)          # data manipulation 
+library(DT)             # interactive tables
+library(ggplot2)        # figures
+library(here)           # relative file paths
+library(leaflet)        # interactive map   
+library(lubridate)      # dates (for filtering)
+library(plotly)         # interactive figures
+library(readr)          # read in station locations
+library(strings)        # convert_depth_to_ordered_factor() function
+library(tgc)            # season functions
+library(xaringanExtra)  # tabs in slides
+library(xaringanthemer) # css style sheet
 
 # to enable tabs
 xaringanExtra::use_panelset()
@@ -64,19 +65,27 @@ style_mono_accent(
 )
 
 # DT options
+font.size <- "75%"
 dt_options <- list(
       dom = 'ft',
       paging = FALSE,
       searching = TRUE,
-      scrollY = "225px",
+      scrollY = "250px",
       scrollX = "500px",
       pageLength = 500,
-      columnDefs = list(list(className = 'dt-center', targets = "_all"))
+      columnDefs = list(list(className = 'dt-center', targets = "_all")),
+      initComplete = htmlwidgets::JS(
+        "function(settings, json) {",
+        paste0("$(this.api().table().container()).css({'font-size': '", font.size, "'});"),
+        "}")
 )
 
 theme_set(theme_light())
 
 st_dat <- TRUE
+
+text_size <- 16
+plot_theme <- theme(text = element_text(size = text_size))
 
 ```
 
@@ -102,7 +111,6 @@ dat_raw <- import_strings_data(
   )
 ```
 
-
 ```{r analysis, echo=FALSE, warning=FALSE, eval=TRUE}
 
 colour_pal <- get_colour_palette(dat_raw)
@@ -116,35 +124,39 @@ dat_seasons <-  dat_raw %>%
       (STATION == "Madeline Point" & SEASON == "S2")
   ) 
 
-# check for data gaps 
-# gap_table <- dat_seasons %>% 
-#   check_for_data_gaps(STATION) %>% 
-#   arrange(STATION, DEPTH) %>% 
-#   group_by(STATION, DEPTH) %>%
-#   summarize(TOTAL_GAP_DAYS = sum(GAP_LENGTH_DAYS)) %>%
-#   ungroup()
-
 # degree days
 dd <- count_degree_days(dat_seasons, STATION, rm_gap_days = FALSE) %>% 
   select(-SEASON, -n_OBSERVATIONS) %>% 
   relocate(AVG_TEMPERATURE, .before = n_degree_days)
 
 # TGC model
-# w_t <- 5.5
-# tgc <- c(0.25, 0.3, 0.35)
-# 
-# tgc_table <- TGC_calculate_initial_weight(dd, final_weight = w_t, tgc = tgc) %>%
-#   arrange(STATION, DEPTH) %>% 
-#  select(-FINAL_WEIGHT)
+w_t <- 5.5
+tgc <- c(0.25, 0.3, 0.35)
 
-# # filter out heat stress events for plotting (do NOT send this to count_dd)
-# dat_filt <- dat_seasons %>% 
-#   filter_out_heat_stress_events() 
+tgc_table <- TGC_calculate_initial_weight(dd, final_weight = w_t, tgc = tgc) %>%
+  arrange(STATION, DEPTH) %>%
+  select(-FINAL_WEIGHT)
+
+# filter out heat stress events for plotting (do NOT send this to count_dd)
+dat_filt <- dat_seasons %>%
+  filter_out_heat_stress_events()
 
 ```
 
 class: center
-# **BACKGROUND & MOTIVATION**
+# **MOTIVATION & BACKGROUND**
+
+???
+- Hello folks, and Happy New Year.
+- For those of you I haven't met, my name is Danielle Dempsey. I am the Research Fellow in Coastal Oceanography at CMAR.
+- Today I'm going to tell you about a paper that Gregor and I and some other folks have been working on.
+- The title is kind of a mouthful:
+- This is the first time we've shared these results, so they are "hot off the press" and may change a little as we get feedback from folks like yourselves, but I definitely think it's worth sharing at this stage. 
+
+**
+- I'll start with discussing the motivation for the paper, and then talk about the model we used before jumping into the analysis and results.
+
+- As you know, cultured salmon are grown on land in fresh water for the first part of their life, and then transferred to salt water farms when they become smolt.
 
 ---
 # Motivation
@@ -155,21 +167,19 @@ class: center
 - Mainly to reduce disease potential 
 --
 
-- Could also enable grow-out to market size in less than a year
+- Could also enable net pen grow-out to market size in less than a year
 --
 
 .pull-center[
-**Potential for novel sites in areas typically considered unsuitable for aquaculture**
+**Potential for novel sites in areas previously considered unsuitable for aquaculture**
 ]
 
 ???
-- I'll start with discussing the motivation for the paper, and then talk about the model we used before jumping into the results.
-
 - As you know, cultured salmon are grown on land in fresh water for the first part of their life, and then transferred to salt water farms when they become smolt.
 
 - Typically this happens when the smolt are about 100 to 150 g
 
-- There has been a recent trend in the industry to stock psot-smolts that are closer to 500 g or even a full 1 kg.
+- There has been a recent trend in the industry to stock post-smolts that are closer to 500 g or even a full 1 kg.
 
 - This strategy has primarily been implemented to reduce disease potential, and has also been used to reduce grow-out time.
 
@@ -178,9 +188,8 @@ class: center
 - Which could open up novel sites in areas that are typically considered unsuitable for aquaculture because they experience seasonal superchill.
 
 
-- Smolts are produced in freshwater land-based hatcheries 
+
 - Smoltification is when salmon change lifestages from being “parr” in freshwater to “smolts” adapted to saltwater.
-- This is now commonly done when the salmon reach about 100 to 150g after 8-10 months.
 
 Norway:
 Prior to January 2013, the maximum allowable juvenile weight was 250 g. In January 2013, this value was changed to 1 kg, increasing the flexibility of the production process. 
@@ -188,11 +197,10 @@ Prior to January 2013, the maximum allowable juvenile weight was 250 g. In Janua
 - Larger smolts are increasingly popular in Norway, where licences for extra biomass are limited and expensive, in Tasmania, and to an increasing extent in Scotland.
 
 
-
 ---
-# Thermal Growth Coefficient Model
+# How big does a post-smolt salmon need to be <br/> to grow to market size at a given location?
 
-**How big does a post-smolt salmon need to be to grow to market size at a given location?**
+Thermal Growth Coefficient (TGC) model
 
 $$
 w_0 = (w_t^{1/3} - \frac{TGC}{1000} * degreedays)^3
@@ -210,13 +218,13 @@ $$degreedays = T_{Avg} * n_{days}$$
 - $degreedays$ = degree days experienced by fish over growing season -> **empirical data**
 
 ???
+- And so the question we are asking in this paper is....
+- To explore this question, we are using the thermal growth coefficient model, which relates the initial weight and final weight of a fish based on the average temperature over a period of time
 
-Relates initial weight and final weight based on the average temperature over a period of time
-
-- $T_{Avg}$ = average temperature over the growing season*
-- $n_{days}$ = number of days in the growing season*
-
-*Assume no growth for 24 hours after observation $\ge$ 18 degrees Celsius 
+- For our analysis, we want to calculate the initial weight
+- The final weight is market size, which we assumed to be 5.5 kg
+- The TGC is a coefficient that has been determined from other studies. Here we are testing three values to get an idea of the sensitivity: one that represents a slowing-growing or "remedial" stock; one to represent an average stock, and one to represent a fast-growing or "elite" stock
+- Finally, the degree-days are calculated as the average temperature over a given number of growing days. What is really exciting and unique about this paper is that we have empirical data that we can use to calculate degree-days for different locations around NS
 
 
 ---
@@ -230,7 +238,7 @@ Relates initial weight and final weight based on the average temperature over a 
 all_stations <- read_csv(
   here("data/Station_Locations_2021-12-21.csv"), show_col_types = FALSE)
 
-p <- all_stations %>% 
+all_stations %>% 
   mutate(
     COUNTY = paste("County:", COUNTY),
     WATERBODY = paste("Waterbody:", WATERBODY),
@@ -241,11 +249,13 @@ p <- all_stations %>%
   addProviderTiles(providers$CartoDB.Positron)%>%
   addMarkers(~LONGITUDE, ~LATITUDE, popup = ~LABEL)
 
-p
-
 ```
 
 ???
+- As a quick reminder, CMAR coordinates an extensive Coastal Monitoring Program that includes high resolution temperature monitoring.
+- We also measure dissolved oxygen and sometimes salinity at these locations, but temperature is the important one for this analysis.
+- So far we have processed data from 190 deployments at 86 different locations, which you can see in the figure here
+- We have pretty good coverage around the province, particularly along the Eastern Shore up to Guysborough county, and over in St. Marys Bay.
 
 
 ---
@@ -254,42 +264,53 @@ p
 .panelset[
 
 .panel[.panel-name[Flat Island]
-```{r, echo=FALSE, fig.height=5.5, eval=FALSE}
+```{r, echo=FALSE, fig.height=5.5, eval=TRUE}
 
-p <- dat_raw %>% 
+dat_raw %>% 
   filter(STATION == "Flat Island") %>% 
   plot_temperature_at_depth(heat_threshold = Inf, 
                             superchill_threshold = -Inf,
                             trend_threshold = NULL,
                             legend_drop = TRUE) +
-  theme(text = element_text(size = 16)
-  )
+  plot_theme
 
-p
 ```
 ]
-
 .panel[.panel-name[Beaver Point]
-```{r, echo=FALSE, fig.height=5.5, eval=FALSE}
+```{r, echo=FALSE, fig.height=5.5, eval=TRUE}
 
-p <- dat_raw %>% 
+dat_raw %>% 
   filter(STATION == "Beaver Point") %>% 
   plot_temperature_at_depth(heat_threshold = Inf, 
                             superchill_threshold = -Inf,
                             trend_threshold = NULL,
                             legend_drop = TRUE) +
-  theme(text = element_text(size = 16)
+  plot_theme +
+  theme(
+    axis.title = element_text(size = 16),
+    legend.text = element_text(size = 16)
   )
-
-p
-
+  
 ```
 ]
 ]
 
+???
+- Here is an example of temperature data from Flat Island in Lunenburg County, just outside of Mahone Bay.
+- This is data for about 3.5 years, from May 2018 to November 2021
+- There are 5 different depths, represented by colour
+- You can see the temperature is pretty well stratified in the summmer months, but is much more well mixed in the winter.
+
+- Just another quick example. 
+- This is for Beaver Point on the Eastern Shore of Halifax county. 
+- Nearly 4 years of data for 4 different depths
+
 ---
 class: center
-# **ANALYSIS**
+# **ANALYSIS & RESULTS**
+
+???
+- Now I'm going to move into some of the details of our analysis and preliminary results
 
 Identify Growing Seasons
 
@@ -315,13 +336,12 @@ dat_seasons %>%
   plot_temperature_at_depth(legend_drop = TRUE,
                             date_breaks_major = "2 month",
                             date_labels_format = "%Y-%b-%d") +
-  theme(text = element_text(size = 16))
+  plot_theme
 
 ```
 ]
 
 .panel[.panel-name[Season Table]
-
 ```{r}
 
 dd %>% 
@@ -334,13 +354,23 @@ dd %>%
   datatable(rownames = FALSE, options = dt_options)
 
 ```
-
 ]
 ]
 
+???
+- The first thing I did was tell the code to look through all the temperature data from all of the locations we just saw and assign growing seasons, i.e., a date when fish could theoretically be put into the water, and when they would be removed.
+- Based on advice provided by Roland, the season starts when the temperature exceeds the 4-degree threshold, which is marked by the dashed grey line in the figure, and doesn't go back down below it, 
+- The season ends at the first observation before superchill, which is indicated by the blue shaded region.
+- If there is no superchill, then the season ends after 18 months
 
-`r knitr::knit_exit()`
 
+- This figure shows one season of data for Beaver Point.
+
+- I realize that it is not 
+
+- Obviously it is much easier to define the seasons this way in retrospect  
+
+- did this for all stations + depths
 
 ---
 
@@ -350,7 +380,7 @@ dd %>%
 - 3 examples  
   - Short season (< 8.5 months)
   - Medium season (8.5 - 17 months)
-  - Long season ($\ge$ 17 months)
+  - Long season ( $\ge$ 17 months)
 
 - Data gaps < 2 days
 - At least 3 depths (2 m, 5 m, 10 m)
@@ -359,16 +389,13 @@ dd %>%
 .pull-right[
 ```{r, echo=FALSE, fig.width=7}
 
-dat_map <- read_csv(
-  here("data/station_season_class.csv"), show_col_types = FALSE)
-
 rad <- 8
-alpha = 0.5
+alpha <- 0.5
 
-leaflet(dat_map) %>%
+p <- leaflet(all_stations) %>%
   addProviderTiles(providers$CartoDB.Positron) %>%
   addCircleMarkers(
-    data = filter(dat_map, SEASON_CLASS == "Short"),
+    data = filter(all_stations, STATION == "Madeline Point"),
     ~LONGITUDE, ~LATITUDE, label = ~STATION,
     fillColor = "blue",
     stroke = FALSE,
@@ -376,155 +403,155 @@ leaflet(dat_map) %>%
     radius = rad
   ) %>% 
   addCircleMarkers(
-    data = filter(dat_map, SEASON_CLASS == "Medium"),
+    data = filter(all_stations, STATION == "Beaver Point"),
     ~LONGITUDE, ~LATITUDE, label = ~STATION,
     fillColor = "orange",
     stroke = FALSE,
     fillOpacity = alpha,
-     radius = rad
+    radius = rad
   ) %>% 
   addCircleMarkers(
-    data = filter(dat_map, SEASON_CLASS == "Long"),
+    data = filter(all_stations, STATION == "Flat Island"),
     ~LONGITUDE, ~LATITUDE, label = ~STATION,
     fillColor = "red",
     stroke = FALSE,
     fillOpacity = alpha,
-     radius = rad
+    radius = rad
   )
+
+p
 
 ```
 ]
 
 ???
-- for > 17 months, say no superchill
+- Next, I wanted to choose three example stations to focus on for the paper, representing a short, medium, and long growing season.
+- I applied a few other criteria, including filtering out any seasons that had prolonged data gaps
+- and only keeping stations with data for 2, 5, and 10 m to facilitate comparison
 
+- At the end of this exercise, I chose Flat Island to represent a long season, Beaver Point for a medium season, and Madeline Point as a short season
 
 ---
+# Growing Days
 
-
-
-```{r, message=FALSE, warning=FALSE}
-
-# ANALYSIS HERE
-
-# CAN send this to count_degree_days() (but NOT if heat stress events are filtered)
-dat_seasons <-  dat_raw %>% 
-  filter_in_growing_seasons() %>% 
-  filter(
-    (STATION == "Flat Island" & SEASON == "S3") |
-      (STATION == "Beaver Point" & SEASON == "S2") |
-      (STATION == "Madeline Point" & SEASON == "S2")
-  ) 
-
-# check for data gaps 
-gap_table <- dat_seasons %>% 
-  check_for_data_gaps(STATION) %>% 
-  arrange(STATION, DEPTH) %>% 
-  group_by(STATION, DEPTH) %>%
-  summarize(TOTAL_GAP_DAYS = sum(GAP_LENGTH_DAYS)) %>%
-  ungroup()
-
-# degree days
-dd <- count_degree_days(dat_seasons, STATION, rm_gap_days = FALSE) %>% 
-  select(-SEASON, -n_OBSERVATIONS) %>% 
-  relocate(AVG_TEMPERATURE, .before = n_degree_days)
-
-# TGC model
-w_t <- 5.5
-tgc <- c(0.25, 0.3, 0.35)
-
-tgc_table <- TGC_calculate_initial_weight(dd, final_weight = w_t, tgc = tgc) %>%
-  arrange(STATION, DEPTH) %>% 
-  select(-FINAL_WEIGHT)
-
-# filter out heat stress events for plotting (do NOT send this to count_dd)
-dat_filt <- dat_seasons %>% 
-  filter_out_heat_stress_events() 
-
-```
-
-
-```{r, echo=FALSE}
-n_days <- 14
-text_size <- 8
-plot_theme <- theme(axis.text = element_text(size = text_size))
-
-```
-
-
-## Growing Seasons {.tabset}
-
-### Madeline Point (Short Season)
+- $degreedays = T_{Avg} * n_{days}$
+- Assume no growth for 24 hours after observation $\ge$ 18 degrees Celsius 
 
 ```{r, echo=FALSE, message=FALSE}
 
+n_days <- 14
+
+#############
 short_filt <- dat_filt %>%
   filter(STATION == "Madeline Point")
 
-min_timestamp <- min(short_filt$TIMESTAMP) - days(n_days)
-max_timestamp <- max(short_filt$TIMESTAMP) + days(n_days)
+min1 <- min(short_filt$TIMESTAMP) - days(n_days)
+max1 <- max(short_filt$TIMESTAMP) + days(n_days)
 
 short_raw <- dat_raw %>% 
   filter(STATION == "Madeline Point",
-         TIMESTAMP >= min_timestamp, TIMESTAMP <= max_timestamp)
+         TIMESTAMP >= min1, TIMESTAMP <= max1)
 
-p2 <- plot_filtered_data(short_raw, short_filt,
+p1 <- plot_filtered_data(short_raw, short_filt,
                          date_breaks_major = "1 month",
-                         date_labels_format = "%Y-%b", 
-                         plotly_friendly = FALSE) +
+                         date_labels_format = "%Y-%b") +
   plot_theme
-  
-p2
 
-```
-
-
-### Beaver Point (Medium Season)
-
-```{r, echo=FALSE, message=FALSE}
-
+#############
 med_filt <- dat_filt %>%
   filter(STATION == "Beaver Point")
 
-min_timestamp <- min(med_filt$TIMESTAMP) - days(n_days)
-max_timestamp <- max(med_filt$TIMESTAMP) + days(n_days)
+min2 <- min(med_filt$TIMESTAMP) - days(n_days)
+max2 <- max(med_filt$TIMESTAMP) + days(n_days)
 
-med_raw <- med_raw %>% 
+med_raw <- dat_raw %>% 
   filter(STATION == "Beaver Point",
-         TIMESTAMP >= min_timestamp, TIMESTAMP <= max_timestamp)
+         TIMESTAMP >= min2, TIMESTAMP <= max2)
 
 p2 <- plot_filtered_data(med_raw, med_filt,
                          date_breaks_major = "1 month",
                          date_labels_format = "%Y-%b", 
                          plotly_friendly = FALSE) +
   plot_theme
-  
+
+#############
+long_filt <- dat_filt %>%
+  filter(STATION == "Flat Island")
+
+min3 <- min(long_filt$TIMESTAMP) - days(n_days)
+max3 <- max(long_filt$TIMESTAMP) + days(n_days)
+
+long_raw <- dat_raw %>% 
+  filter(STATION == "Flat Island",
+         TIMESTAMP >= min3, TIMESTAMP <= max3)
+
+p3 <- plot_filtered_data(long_raw, long_filt,
+                         date_breaks_major = "2 month",
+                         date_labels_format = "%Y-%b", 
+                         plotly_friendly = FALSE) +
+  plot_theme
+
+```
+
+.panelset[
+
+.panel[.panel-name[Madeline Point]
+
+```{r, fig.height=4.7, fig.width=15.5} 
+p1
+```
+
+]
+.panel[.panel-name[Beaver Point]
+
+```{r, fig.height=4.7, fig.width=15.5} 
 p2
-
 ```
 
+]
+.panel[.panel-name[Flat Island]
 
-```{r, eval=FALSE}
-
-fig_width <- 19
-fig_height <- 7
-
-ggsave(
-  p2,
-  filename = "figure2.png",
-  path = here("figs"),
-  device = "png",
-  width = fig_width, height = fig_height, units = "cm",
-  dpi = 600
-)
-
+```{r, fig.height=4.7, fig.width=15.5} 
+p3
 ```
 
+]
 
-## Degree Days {.tabset}
+.panel[.panel-name[Season Table]
 
-### Figure 
 ```{r}
+
+dd %>% 
+  select(STATION, DEPTH, START_SEASON, END_SEASON, STOCKED_DAYS,
+         n_filtered_days, n_growing_days) %>% 
+  mutate(
+    START_SEASON = format(as_date(START_SEASON)),
+    END_SEASON = format(as_date(END_SEASON))
+  ) %>% 
+  arrange(STATION) %>% 
+  datatable(rownames = FALSE, options = dt_options)
+
+```
+]
+]
+
+???
+- The next step was to calculate the number of growing days at each station, for the degree-day calculation
+- We assumed that there would be no growth for 24 hours after the temperature exceeded 18 degrees Celcius, as illustrated in this figure.
+
+- This is data from Madeline Point, our example of a short growing season. All of the observations greater than 18 degrees C, in the red part of the figure AND 24 hours after were filtered out of the analysis and not included in the average temperature OR number of degree days
+
+- 31 days filtered out for 2 m depth; only 3.5 filtered out at 22 m
+
+---
+# Degree Days
+
+$$degreedays = T_{Avg} * n_{days}$$
+.panelset[
+
+.panel[.panel-name[Figure]
+
+```{r, echo=FALSE, fig.height=4.7}
 
 p <- ggplot(dd, aes(STATION, n_degree_days, fill = DEPTH,
                     text = paste(
@@ -533,12 +560,12 @@ p <- ggplot(dd, aes(STATION, n_degree_days, fill = DEPTH,
                       "Growing Days: ", n_growing_days, "\n",
                       "Degree Days: ", n_degree_days))
 ) +
-  geom_point(pch = 21, size = 4,
-             position = position_jitter(width = 0.05, height = 0, seed = 10)) +
+  geom_point(pch = 21, size = 4, alpha = 0.75,
+             position = position_jitter(width = 0.0, height = 0, seed = 10)) +
   scale_fill_manual("Depth (m)", values = colour_pal) +
   scale_x_discrete(name = "") +
   scale_y_continuous(name = "Number of Degree Days") +
-  theme_light()
+  plot_theme
 
 ggplotly(p, tooltip = "text") %>%
   config(
@@ -559,45 +586,51 @@ ggplotly(p, tooltip = "text") %>%
 
 ```
 
-### Table
-```{r echo=FALSE}
+]
 
+.panel[.panel-name[Table]
+
+```{r echo=FALSE}
 dd %>%
   mutate(
     START_SEASON = format(as_date(START_SEASON)),
     END_SEASON = format(as_date(END_SEASON))
   ) %>% 
   arrange(STATION) %>% 
-  datatable(
-    rownames = FALSE, options = dt_options, 
-    caption = "Figure 1: Degree days after applying season and heat stress filters."
-  )
+  datatable(rownames = FALSE, options = dt_options) 
 
 ```
+
+]
+]
+
+???
 Note: Partial STOCKED_DAYS caused by the times of END_SEASON and START_SEASON (not shown).
 
-## Thermal Growth Coefficient Model {.tabset}
+---
+# TGC Model Results
 
+**How big does a post-smolt salmon need to be to grow to market size at a given location?**
 
-### Figure
-```{r}
-
-p <-  ggplot(tgc_table, aes(x = factor(TGC), y = TGC_INITIAL_WEIGHT, fill = DEPTH,
+```{r, fig.height=5.5}
+p <-  ggplot(tgc_table, 
+             aes(x = factor(TGC), y = TGC_INITIAL_WEIGHT, fill = DEPTH,
              text = paste(
                       "Depth: ", DEPTH, "m", "\n",
                       "Average Temp: ", AVG_TEMPERATURE, "\n",
                       "Growing Days: ", n_growing_days, "\n",
                       "Degree Days: ", n_degree_days, "\n",
                       "Initial Weight: ", TGC_INITIAL_WEIGHT ))) +
+  geom_hline(yintercept = 1.5, linetype = 2, col = "darkgrey") +
   geom_point(
     pch = 21, size = 3, alpha = 0.75,
-    position = position_jitter(width = 0.15, height = 0, seed = 10)
+    position = position_jitter(width = 0, height = 0, seed = 10)
   ) +
   scale_fill_manual("Depth (m)", values = colour_pal, drop = FALSE) +
   scale_x_discrete("TGC Value") +
   scale_y_continuous("Initial Weight (kg)") +
-  facet_wrap(~STATION)
-
+  facet_wrap(~STATION) +
+  plot_theme
 
 ggplotly(p, tooltip = "text") %>%
   config(
@@ -618,17 +651,25 @@ ggplotly(p, tooltip = "text") %>%
 
 ```
 
+???
 
-### Table
 
-```{r}
+---
+# Discussion
 
-tgc_table %>%
-  select(-START_SEASON, -END_SEASON) %>%
-  arrange(STATION, DEPTH) %>%
-  datatable(rownames = FALSE, options = dt_options)
 
-```
+
+
+
+
+???
+- Thanks to Bruce/Gregor for giving me a chance to tell you about this work
+- Questions
+- Hot off the press!
+
+
+---
+# Next Steps
 
 
 ---
@@ -668,7 +709,46 @@ ALT text: How big does a post-smolt salmon need to be to grow out to market size
 (observations in this window are removed and not included in $T_{Avg}$ or $n_{days}$)
 
 
+---
+# Season Length
 
+```{r, echo=FALSE}
 
+dat_map <- read_csv(
+  here("data/station_season_class.csv"), show_col_types = FALSE)
+
+rad <- 8
+alpha <- 0.5
+
+leaflet(dat_map) %>%
+  addProviderTiles(providers$CartoDB.Positron) %>%
+  addCircleMarkers(
+    data = filter(dat_map, SEASON_CLASS == "Short"),
+    ~LONGITUDE, ~LATITUDE, label = ~STATION,
+    fillColor = "blue",
+    stroke = FALSE,
+    fillOpacity = alpha,
+    radius = rad
+  ) %>% 
+  addCircleMarkers(
+    data = filter(dat_map, SEASON_CLASS == "Medium"),
+    ~LONGITUDE, ~LATITUDE, label = ~STATION,
+    fillColor = "orange",
+    stroke = FALSE,
+    fillOpacity = alpha,
+     radius = rad
+  ) %>% 
+  addCircleMarkers(
+    data = filter(dat_map, SEASON_CLASS == "Long"),
+    ~LONGITUDE, ~LATITUDE, label = ~STATION,
+    fillColor = "red",
+    stroke = FALSE,
+    fillOpacity = alpha,
+     radius = rad
+  )
+
+```
+
+`r knitr::knit_exit()`
 
 

@@ -4,7 +4,7 @@
     <title>Application of coastal temperature regimens to inform selection of year-round &amp; seasonal sites for   Atlantic salmon culture</title>
     <meta charset="utf-8" />
     <meta name="author" content="Danielle Dempsey, Gregor Reid, et al." />
-    <meta name="date" content="2022-01-11" />
+    <meta name="date" content="2022-01-12" />
     <script src="libs/header-attrs-2.11/header-attrs.js"></script>
     <link href="libs/panelset-0.2.6/panelset.css" rel="stylesheet" />
     <script src="libs/panelset-0.2.6/panelset.js"></script>
@@ -26,6 +26,10 @@
     <script src="libs/dt-core-1.10.20/js/jquery.dataTables.min.js"></script>
     <link href="libs/crosstalk-1.1.1/css/crosstalk.css" rel="stylesheet" />
     <script src="libs/crosstalk-1.1.1/js/crosstalk.min.js"></script>
+    <script src="libs/plotly-binding-4.10.0/plotly.js"></script>
+    <script src="libs/typedarray-0.1/typedarray.min.js"></script>
+    <link href="libs/plotly-htmlwidgets-css-2.5.1/plotly-htmlwidgets.css" rel="stylesheet" />
+    <script src="libs/plotly-main-2.5.1/plotly-latest.min.js"></script>
     <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
   </head>
   <body>
@@ -35,7 +39,7 @@ class: center, middle, inverse, title-slide
 # Application of coastal temperature regimens to inform selection of year-round &amp; seasonal sites for <br/> Atlantic salmon culture
 ### Danielle Dempsey, Gregor Reid, et al.
 ### CMAR
-### 2022-01-11
+### 2022-01-12
 
 ---
 
@@ -44,6 +48,7 @@ layout: true
 background-image: url(logo2.png)
 background-position: 50% 100%
 background-size: 100%
+
 ---
 
 
@@ -52,9 +57,20 @@ background-size: 100%
 
 
 
-
 class: center
-# **BACKGROUND &amp; MOTIVATION**
+# **MOTIVATION &amp; BACKGROUND**
+
+???
+- Hello folks, and Happy New Year.
+- For those of you I haven't met, my name is Danielle Dempsey. I am the Research Fellow in Coastal Oceanography at CMAR.
+- Today I'm going to tell you about a paper that Gregor and I and some other folks have been working on.
+- The title is kind of a mouthful:
+- This is the first time we've shared these results, so they are "hot off the press" and may change a little as we get feedback from folks like yourselves, but I definitely think it's worth sharing at this stage. 
+
+**
+- I'll start with discussing the motivation for the paper, and then talk about the model we used before jumping into the analysis and results.
+
+- As you know, cultured salmon are grown on land in fresh water for the first part of their life, and then transferred to salt water farms when they become smolt.
 
 ---
 # Motivation
@@ -73,13 +89,11 @@ class: center
 ]
 
 ???
-- I'll start with discussing the motivation for the paper, and then talk about the model we used before jumping into the results.
-
 - As you know, cultured salmon are grown on land in fresh water for the first part of their life, and then transferred to salt water farms when they become smolt.
 
 - Typically this happens when the smolt are about 100 to 150 g
 
-- There has been a recent trend in the industry to stock psot-smolts that are closer to 500 g or even a full 1 kg.
+- There has been a recent trend in the industry to stock post-smolts that are closer to 500 g or even a full 1 kg.
 
 - This strategy has primarily been implemented to reduce disease potential, and has also been used to reduce grow-out time.
 
@@ -88,9 +102,8 @@ class: center
 - Which could open up novel sites in areas that are typically considered unsuitable for aquaculture because they experience seasonal superchill.
 
 
-- Smolts are produced in freshwater land-based hatcheries 
+
 - Smoltification is when salmon change lifestages from being “parr” in freshwater to “smolts” adapted to saltwater.
-- This is now commonly done when the salmon reach about 100 to 150g after 8-10 months.
 
 Norway:
 Prior to January 2013, the maximum allowable juvenile weight was 250 g. In January 2013, this value was changed to 1 kg, increasing the flexibility of the production process. 
@@ -98,11 +111,10 @@ Prior to January 2013, the maximum allowable juvenile weight was 250 g. In Janua
 - Larger smolts are increasingly popular in Norway, where licences for extra biomass are limited and expensive, in Tasmania, and to an increasing extent in Scotland.
 
 
-
 ---
-# Thermal Growth Coefficient Model
+# How big does a post-smolt salmon need to be &lt;br/&gt; to grow to market size at a given location?
 
-**How big does a post-smolt salmon need to be to grow to market size at a given location?**
+Thermal Growth Coefficient (TGC) model
 
 $$
 w_0 = (w_t^{1/3} - \frac{TGC}{1000} * degreedays)^3
@@ -120,13 +132,13 @@ $$
 - `\(degreedays\)` = degree days experienced by fish over growing season -&gt; **empirical data**
 
 ???
+- And so the question we are asking in this paper is....
+- To explore this question, we are using the thermal growth coefficient model, which relates the initial weight and final weight of a fish based on the average temperature over a period of time
 
-Relates initial weight and final weight based on the average temperature over a period of time
-
-- `\(T_{Avg}\)` = average temperature over the growing season*
-- `\(n_{days}\)` = number of days in the growing season*
-
-*Assume no growth for 24 hours after observation `\(\ge\)` 18 degrees Celsius 
+- For our analysis, we want to calculate the initial weight
+- The final weight is market size, which we assumed to be 5.5 kg
+- The TGC is a coefficient that has been determined from other studies. Here we are testing three values to get an idea of the sensitivity: one that represents a slowing-growing or "remedial" stock; one to represent an average stock, and one to represent a fast-growing or "elite" stock
+- Finally, the degree-days are calculated as the average temperature over a given number of growing days. What is really exciting and unique about this paper is that we have empirical data that we can use to calculate degree-days for different locations around NS
 
 
 ---
@@ -135,10 +147,14 @@ Relates initial weight and final weight based on the average temperature over a 
 - High resolution monitoring of **temperature** (plus dissolved oxygen &amp; some salinity)
 - Processed 190 deployments from 86 locations
 
-<div id="htmlwidget-0edaf1d0333768a0a20f" style="width:1080px;height:403.2px;" class="leaflet html-widget"></div>
-<script type="application/json" data-for="htmlwidget-0edaf1d0333768a0a20f">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addProviderTiles","args":["CartoDB.Positron",null,null,{"errorTileUrl":"","noWrap":false,"detectRetina":false}]},{"method":"addMarkers","args":[[44.634167,44.669583,44.66939,44.6782,45.6598,45.675,45.654886,45.78334450726,44.32794,44.41007,44.539117,44.503833,44.5328,44.324017,44.32015,44.401726,44.35062,44.333112,44.35013,44.485671,45.40052,45.35078,45.3586,45.35493,45.16005,45.26751,45.25846,45.10312,45.08461,44.94988,45.15527,45.52511,45.58928,45.23018,45.22564,45.25007,45.20768,45.24929,45.19943,45.25545,45.24045,45.27063,45.28693,45.23757,45.24709,45.23375,45.07278,44.87761,44.73416,44.50116,44.83858,44.77437,44.838781,44.81769,44.55768,45.59586275,45.976083,44.43346,44.43843,44.54357,44.50889,44.57130379,44.5483,45.65,45.644,45.34641,44.02611,45.4934062203816,45.50135,45.49824,45.49028,45.49823692,45.52904,45.6026,45.56094,43.68621,43.7169,43.52369502,43.46887,43.67902,43.79075,43.7210203567927,43.68447,43.7160798954253,43.69405,43.8144],[-65.711933,-65.647733,-65.64479,-65.68329,-61.904158,-61.908,-61.828774,-63.2251923345618,-65.92824,-65.996999,-65.957983,-65.932367,-65.98404,-66.135683,-66.135067,-66.159589,-66.224861,-66.202076,-66.2243,-66.059566,-61.42225,-61.26832,-61.4208,-61.03793,-61.68007,-60.97922,-60.9998,-61.63028,-61.82237,-62.01012,-61.39867,-61.25595,-61.37928,-61.25339,-61.2961,-61.29866,-61.35319,-61.14684,-61.191,-61.14594,-61.16833,-61.135,-61.16842,-61.14947,-61.15647,-61.15836,-61.8605,-62.39922,-62.81035,-63.81413,-62.51107,-62.72518,-62.471151,-62.62061,-63.95343,-61.36382192,-61.022683,-64.1312,-64.25006,-64.17342,-64.13291,-64.03512147,-64.01741,-62.525,-62.468,-62.66088,-64.66574,-61.0194651783081,-61.04197,-61.0913,-61.03831,-61.01930751,-60.92601,-60.90244,-60.7611,-65.16825,-65.008796,-65.35572913,-65.43173,-65.89818,-65.91163,-65.8457420580702,-65.83601,-65.9426905867326,-65.95942,-65.9137],null,null,null,{"interactive":true,"draggable":false,"keyboard":true,"title":"","alt":"","zIndexOffset":0,"opacity":1,"riseOnHover":false,"riseOffset":250},["County: Annapolis<\/br>Waterbody: Annapolis Basin<\/br>Station: 5005","County: Annapolis<\/br>Waterbody: Annapolis Basin<\/br>Station: 5006","County: Annapolis<\/br>Waterbody: Annapolis Basin<\/br>Station: Cornwallis","County: Annapolis<\/br>Waterbody: Annapolis Basin<\/br>Station: Lobster Ledge","County: Antigonish<\/br>Waterbody: Antigonish Harbour<\/br>Station: Southside","County: Antigonish<\/br>Waterbody: Grahams Cove<\/br>Station: Captains Pond","County: Antigonish<\/br>Waterbody: Monks Head Harbour<\/br>Station: Monks Head","County: Colchester<\/br>Waterbody: Tatamagouche Bay<\/br>Station: Malagash","County: Digby<\/br>Waterbody: Hourglass Lake<\/br>Station: Hourglass Lake","County: Digby<\/br>Waterbody: Sissiboo River<\/br>Station: Sissiboo","County: Digby<\/br>Waterbody: St. Mary's Bay<\/br>Station: 5007","County: Digby<\/br>Waterbody: St. Mary's Bay<\/br>Station: 5008","County: Digby<\/br>Waterbody: St. Mary's Bay<\/br>Station: Centreville","County: Digby<\/br>Waterbody: St. Mary's Bay<\/br>Station: Church Point 1","County: Digby<\/br>Waterbody: St. Mary's Bay<\/br>Station: Church Point 2","County: Digby<\/br>Waterbody: St. Mary's Bay<\/br>Station: Long Beach","County: Digby<\/br>Waterbody: St. Mary's Bay<\/br>Station: Long Island 1","County: Digby<\/br>Waterbody: St. Mary's Bay<\/br>Station: Long Island 2","County: Digby<\/br>Waterbody: St. Mary's Bay<\/br>Station: Long Island","County: Digby<\/br>Waterbody: St. Mary's Bay<\/br>Station: Sandy Cove St. Mary's","County: Guysborough<\/br>Waterbody: Chedabucto Bay<\/br>Station: Moose Point","County: Guysborough<\/br>Waterbody: Chedabucto Bay<\/br>Station: Rook Island","County: Guysborough<\/br>Waterbody: Chedabucto Bay<\/br>Station: Sandy Cove Chedabucto","County: Guysborough<\/br>Waterbody: Chedabucto Bay<\/br>Station: Tickle Island","County: Guysborough<\/br>Waterbody: Country Harbour<\/br>Station: 1307","County: Guysborough<\/br>Waterbody: Dover Bay<\/br>Station: Madeline Point","County: Guysborough<\/br>Waterbody: Dover Bay<\/br>Station: Seal Cove","County: Guysborough<\/br>Waterbody: Fishermans Harbour<\/br>Station: Meal Rock","County: Guysborough<\/br>Waterbody: Indian Harbour<\/br>Station: Barachois","County: Guysborough<\/br>Waterbody: Marie Joseph Harbour<\/br>Station: Barren Island","County: Guysborough<\/br>Waterbody: New Harbour<\/br>Station: The Bull","County: Guysborough<\/br>Waterbody: Strait of Canso<\/br>Station: Eddy Cove","County: Guysborough<\/br>Waterbody: Strait of Canso<\/br>Station: Pirate Harbour","County: Guysborough<\/br>Waterbody: Tor Bay<\/br>Station: Tanner Island","County: Guysborough<\/br>Waterbody: Tor Bay<\/br>Station: Center Bay","County: Guysborough<\/br>Waterbody: Tor Bay<\/br>Station: English Harbour","County: Guysborough<\/br>Waterbody: Tor Bay<\/br>Station: Larry's River","County: Guysborough<\/br>Waterbody: Whitehead Harbour<\/br>Station: The Channel","County: Guysborough<\/br>Waterbody: Whitehead Harbour<\/br>Station: Bald Rock","County: Guysborough<\/br>Waterbody: Whitehead Harbour<\/br>Station: Burnt Island","County: Guysborough<\/br>Waterbody: Whitehead Harbour<\/br>Station: Fishermans Island","County: Guysborough<\/br>Waterbody: Whitehead Harbour<\/br>Station: Northeast Branch","County: Guysborough<\/br>Waterbody: Whitehead Harbour<\/br>Station: Northwest Branch","County: Guysborough<\/br>Waterbody: Whitehead Harbour<\/br>Station: The Basin","County: Guysborough<\/br>Waterbody: Whitehead Harbour<\/br>Station: White Island","County: Guysborough<\/br>Waterbody: Whitehead Harbour<\/br>Station: Yankee Cove","County: Guysborough<\/br>Waterbody: Wine Harbour<\/br>Station: Wine Harbour","County: Halifax<\/br>Waterbody: Beaver Harbour<\/br>Station: Beaver Point","County: Halifax<\/br>Waterbody: Owls Head Bay<\/br>Station: Owls Head","County: Halifax<\/br>Waterbody: Shad Bay<\/br>Station: Shad Bay","County: Halifax<\/br>Waterbody: Sheet Harbour<\/br>Station: East Gibbs Island","County: Halifax<\/br>Waterbody: Shoal Bay<\/br>Station: Borgles Island","County: Halifax<\/br>Waterbody: Sober Island Pond<\/br>Station: Sober Island","County: Halifax<\/br>Waterbody: Spry Bay<\/br>Station: Spry Harbour","County: Halifax<\/br>Waterbody: St. Margarets Bay<\/br>Station: Shut-In Island","County: Inverness<\/br>Waterbody: Strait of Canso<\/br>Station: Pulp Mill","County: Inverness<\/br>Waterbody: Whycocomagh Bay<\/br>Station: Aberdeen","County: Lunenburg<\/br>Waterbody: Mahone Bay<\/br>Station: Flat Island","County: Lunenburg<\/br>Waterbody: Mahone Bay<\/br>Station: Little Rafuse Island","County: Lunenburg<\/br>Waterbody: Mahone Bay<\/br>Station: Snake Island","County: Lunenburg<\/br>Waterbody: Mahone Bay<\/br>Station: Upper Blandford","County: Lunenburg<\/br>Waterbody: St. Margarets Bay<\/br>Station: Birchy Head","County: Lunenburg<\/br>Waterbody: St. Margarets Bay<\/br>Station: Tilley Point","County: Pictou<\/br>Waterbody: Little Harbour<\/br>Station: Melmerby Beach","County: Pictou<\/br>Waterbody: Merigomish Harbour<\/br>Station: Olding Island","County: Pictou<\/br>Waterbody: Piper Lake<\/br>Station: Piper Lake","County: Queens<\/br>Waterbody: Liverpool Bay<\/br>Station: Mersey Point","County: Richmond<\/br>Waterbody: Arichat Harbour<\/br>Station: 0667","County: Richmond<\/br>Waterbody: Arichat Harbour<\/br>Station: 0716 Center","County: Richmond<\/br>Waterbody: Arichat Harbour<\/br>Station: Cape Auguet","County: Richmond<\/br>Waterbody: Arichat Harbour<\/br>Station: Eastern Passage","County: Richmond<\/br>Waterbody: Arichat Harbour<\/br>Station: Kavanagh Point","County: Richmond<\/br>Waterbody: Bay of Rocks<\/br>Station: Les Rochers","County: Richmond<\/br>Waterbody: Lennox Passage<\/br>Station: Gabion Shoal","County: Richmond<\/br>Waterbody: Little Harbour<\/br>Station: Red Point","County: Shelburne<\/br>Waterbody: Green Harbour<\/br>Station: Blue Island","County: Shelburne<\/br>Waterbody: Little Harbour<\/br>Station: Little Harbour","County: Shelburne<\/br>Waterbody: Negro Harbour<\/br>Station: Ingomar","County: Shelburne<\/br>Waterbody: Port La Tour<\/br>Station: Taylors Rock","County: Yarmouth<\/br>Waterbody: Lobster Bay<\/br>Station: Lobster Bay","County: Yarmouth<\/br>Waterbody: Lobster Bay<\/br>Station: Morris Island","County: Yarmouth<\/br>Waterbody: Lobster Bay<\/br>Station: Old Point Channel","County: Yarmouth<\/br>Waterbody: Lobster Bay<\/br>Station: Ram Island","County: Yarmouth<\/br>Waterbody: Lobster Bay<\/br>Station: Tucker Island","County: Yarmouth<\/br>Waterbody: Lobster Bay<\/br>Station: Wedgeport","County: Yarmouth<\/br>Waterbody: Salt Bay<\/br>Station: Big Sluice"],null,null,null,null,{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},null]}],"limits":{"lat":[43.46887,45.976083],"lng":[-66.224861,-60.7611]}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-3b2c7a91abfc31f970ef" style="width:1080px;height:403.2px;" class="leaflet html-widget"></div>
+<script type="application/json" data-for="htmlwidget-3b2c7a91abfc31f970ef">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addProviderTiles","args":["CartoDB.Positron",null,null,{"errorTileUrl":"","noWrap":false,"detectRetina":false}]},{"method":"addMarkers","args":[[44.634167,44.669583,44.66939,44.6782,45.6598,45.675,45.654886,45.78334450726,44.32794,44.41007,44.539117,44.503833,44.5328,44.324017,44.32015,44.401726,44.35062,44.333112,44.35013,44.485671,45.40052,45.35078,45.3586,45.35493,45.16005,45.26751,45.25846,45.10312,45.08461,44.94988,45.15527,45.52511,45.58928,45.23018,45.22564,45.25007,45.20768,45.24929,45.19943,45.25545,45.24045,45.27063,45.28693,45.23757,45.24709,45.23375,45.07278,44.87761,44.73416,44.50116,44.83858,44.77437,44.838781,44.81769,44.55768,45.59586275,45.976083,44.43346,44.43843,44.54357,44.50889,44.57130379,44.5483,45.65,45.644,45.34641,44.02611,45.4934062203816,45.50135,45.49824,45.49028,45.49823692,45.52904,45.6026,45.56094,43.68621,43.7169,43.52369502,43.46887,43.67902,43.79075,43.7210203567927,43.68447,43.7160798954253,43.69405,43.8144],[-65.711933,-65.647733,-65.64479,-65.68329,-61.904158,-61.908,-61.828774,-63.2251923345618,-65.92824,-65.996999,-65.957983,-65.932367,-65.98404,-66.135683,-66.135067,-66.159589,-66.224861,-66.202076,-66.2243,-66.059566,-61.42225,-61.26832,-61.4208,-61.03793,-61.68007,-60.97922,-60.9998,-61.63028,-61.82237,-62.01012,-61.39867,-61.25595,-61.37928,-61.25339,-61.2961,-61.29866,-61.35319,-61.14684,-61.191,-61.14594,-61.16833,-61.135,-61.16842,-61.14947,-61.15647,-61.15836,-61.8605,-62.39922,-62.81035,-63.81413,-62.51107,-62.72518,-62.471151,-62.62061,-63.95343,-61.36382192,-61.022683,-64.1312,-64.25006,-64.17342,-64.13291,-64.03512147,-64.01741,-62.525,-62.468,-62.66088,-64.66574,-61.0194651783081,-61.04197,-61.0913,-61.03831,-61.01930751,-60.92601,-60.90244,-60.7611,-65.16825,-65.008796,-65.35572913,-65.43173,-65.89818,-65.91163,-65.8457420580702,-65.83601,-65.9426905867326,-65.95942,-65.9137],null,null,null,{"interactive":true,"draggable":false,"keyboard":true,"title":"","alt":"","zIndexOffset":0,"opacity":1,"riseOnHover":false,"riseOffset":250},["County: Annapolis<\/br>Waterbody: Annapolis Basin<\/br>Station: 5005","County: Annapolis<\/br>Waterbody: Annapolis Basin<\/br>Station: 5006","County: Annapolis<\/br>Waterbody: Annapolis Basin<\/br>Station: Cornwallis","County: Annapolis<\/br>Waterbody: Annapolis Basin<\/br>Station: Lobster Ledge","County: Antigonish<\/br>Waterbody: Antigonish Harbour<\/br>Station: Southside","County: Antigonish<\/br>Waterbody: Grahams Cove<\/br>Station: Captains Pond","County: Antigonish<\/br>Waterbody: Monks Head Harbour<\/br>Station: Monks Head","County: Colchester<\/br>Waterbody: Tatamagouche Bay<\/br>Station: Malagash","County: Digby<\/br>Waterbody: Hourglass Lake<\/br>Station: Hourglass Lake","County: Digby<\/br>Waterbody: Sissiboo River<\/br>Station: Sissiboo","County: Digby<\/br>Waterbody: St. Mary's Bay<\/br>Station: 5007","County: Digby<\/br>Waterbody: St. Mary's Bay<\/br>Station: 5008","County: Digby<\/br>Waterbody: St. Mary's Bay<\/br>Station: Centreville","County: Digby<\/br>Waterbody: St. Mary's Bay<\/br>Station: Church Point 1","County: Digby<\/br>Waterbody: St. Mary's Bay<\/br>Station: Church Point 2","County: Digby<\/br>Waterbody: St. Mary's Bay<\/br>Station: Long Beach","County: Digby<\/br>Waterbody: St. Mary's Bay<\/br>Station: Long Island 1","County: Digby<\/br>Waterbody: St. Mary's Bay<\/br>Station: Long Island 2","County: Digby<\/br>Waterbody: St. Mary's Bay<\/br>Station: Long Island","County: Digby<\/br>Waterbody: St. Mary's Bay<\/br>Station: Sandy Cove St. Mary's","County: Guysborough<\/br>Waterbody: Chedabucto Bay<\/br>Station: Moose Point","County: Guysborough<\/br>Waterbody: Chedabucto Bay<\/br>Station: Rook Island","County: Guysborough<\/br>Waterbody: Chedabucto Bay<\/br>Station: Sandy Cove Chedabucto","County: Guysborough<\/br>Waterbody: Chedabucto Bay<\/br>Station: Tickle Island","County: Guysborough<\/br>Waterbody: Country Harbour<\/br>Station: 1307","County: Guysborough<\/br>Waterbody: Dover Bay<\/br>Station: Madeline Point","County: Guysborough<\/br>Waterbody: Dover Bay<\/br>Station: Seal Cove","County: Guysborough<\/br>Waterbody: Fishermans Harbour<\/br>Station: Meal Rock","County: Guysborough<\/br>Waterbody: Indian Harbour<\/br>Station: Barachois","County: Guysborough<\/br>Waterbody: Marie Joseph Harbour<\/br>Station: Barren Island","County: Guysborough<\/br>Waterbody: New Harbour<\/br>Station: The Bull","County: Guysborough<\/br>Waterbody: Strait of Canso<\/br>Station: Eddy Cove","County: Guysborough<\/br>Waterbody: Strait of Canso<\/br>Station: Pirate Harbour","County: Guysborough<\/br>Waterbody: Tor Bay<\/br>Station: Tanner Island","County: Guysborough<\/br>Waterbody: Tor Bay<\/br>Station: Center Bay","County: Guysborough<\/br>Waterbody: Tor Bay<\/br>Station: English Harbour","County: Guysborough<\/br>Waterbody: Tor Bay<\/br>Station: Larry's River","County: Guysborough<\/br>Waterbody: Whitehead Harbour<\/br>Station: The Channel","County: Guysborough<\/br>Waterbody: Whitehead Harbour<\/br>Station: Bald Rock","County: Guysborough<\/br>Waterbody: Whitehead Harbour<\/br>Station: Burnt Island","County: Guysborough<\/br>Waterbody: Whitehead Harbour<\/br>Station: Fishermans Island","County: Guysborough<\/br>Waterbody: Whitehead Harbour<\/br>Station: Northeast Branch","County: Guysborough<\/br>Waterbody: Whitehead Harbour<\/br>Station: Northwest Branch","County: Guysborough<\/br>Waterbody: Whitehead Harbour<\/br>Station: The Basin","County: Guysborough<\/br>Waterbody: Whitehead Harbour<\/br>Station: White Island","County: Guysborough<\/br>Waterbody: Whitehead Harbour<\/br>Station: Yankee Cove","County: Guysborough<\/br>Waterbody: Wine Harbour<\/br>Station: Wine Harbour","County: Halifax<\/br>Waterbody: Beaver Harbour<\/br>Station: Beaver Point","County: Halifax<\/br>Waterbody: Owls Head Bay<\/br>Station: Owls Head","County: Halifax<\/br>Waterbody: Shad Bay<\/br>Station: Shad Bay","County: Halifax<\/br>Waterbody: Sheet Harbour<\/br>Station: East Gibbs Island","County: Halifax<\/br>Waterbody: Shoal Bay<\/br>Station: Borgles Island","County: Halifax<\/br>Waterbody: Sober Island Pond<\/br>Station: Sober Island","County: Halifax<\/br>Waterbody: Spry Bay<\/br>Station: Spry Harbour","County: Halifax<\/br>Waterbody: St. Margarets Bay<\/br>Station: Shut-In Island","County: Inverness<\/br>Waterbody: Strait of Canso<\/br>Station: Pulp Mill","County: Inverness<\/br>Waterbody: Whycocomagh Bay<\/br>Station: Aberdeen","County: Lunenburg<\/br>Waterbody: Mahone Bay<\/br>Station: Flat Island","County: Lunenburg<\/br>Waterbody: Mahone Bay<\/br>Station: Little Rafuse Island","County: Lunenburg<\/br>Waterbody: Mahone Bay<\/br>Station: Snake Island","County: Lunenburg<\/br>Waterbody: Mahone Bay<\/br>Station: Upper Blandford","County: Lunenburg<\/br>Waterbody: St. Margarets Bay<\/br>Station: Birchy Head","County: Lunenburg<\/br>Waterbody: St. Margarets Bay<\/br>Station: Tilley Point","County: Pictou<\/br>Waterbody: Little Harbour<\/br>Station: Melmerby Beach","County: Pictou<\/br>Waterbody: Merigomish Harbour<\/br>Station: Olding Island","County: Pictou<\/br>Waterbody: Piper Lake<\/br>Station: Piper Lake","County: Queens<\/br>Waterbody: Liverpool Bay<\/br>Station: Mersey Point","County: Richmond<\/br>Waterbody: Arichat Harbour<\/br>Station: 0667","County: Richmond<\/br>Waterbody: Arichat Harbour<\/br>Station: 0716 Center","County: Richmond<\/br>Waterbody: Arichat Harbour<\/br>Station: Cape Auguet","County: Richmond<\/br>Waterbody: Arichat Harbour<\/br>Station: Eastern Passage","County: Richmond<\/br>Waterbody: Arichat Harbour<\/br>Station: Kavanagh Point","County: Richmond<\/br>Waterbody: Bay of Rocks<\/br>Station: Les Rochers","County: Richmond<\/br>Waterbody: Lennox Passage<\/br>Station: Gabion Shoal","County: Richmond<\/br>Waterbody: Little Harbour<\/br>Station: Red Point","County: Shelburne<\/br>Waterbody: Green Harbour<\/br>Station: Blue Island","County: Shelburne<\/br>Waterbody: Little Harbour<\/br>Station: Little Harbour","County: Shelburne<\/br>Waterbody: Negro Harbour<\/br>Station: Ingomar","County: Shelburne<\/br>Waterbody: Port La Tour<\/br>Station: Taylors Rock","County: Yarmouth<\/br>Waterbody: Lobster Bay<\/br>Station: Lobster Bay","County: Yarmouth<\/br>Waterbody: Lobster Bay<\/br>Station: Morris Island","County: Yarmouth<\/br>Waterbody: Lobster Bay<\/br>Station: Old Point Channel","County: Yarmouth<\/br>Waterbody: Lobster Bay<\/br>Station: Ram Island","County: Yarmouth<\/br>Waterbody: Lobster Bay<\/br>Station: Tucker Island","County: Yarmouth<\/br>Waterbody: Lobster Bay<\/br>Station: Wedgeport","County: Yarmouth<\/br>Waterbody: Salt Bay<\/br>Station: Big Sluice"],null,null,null,null,{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},null]}],"limits":{"lat":[43.46887,45.976083],"lng":[-66.224861,-60.7611]}},"evals":[],"jsHooks":[]}</script>
 
 ???
+- As a quick reminder, CMAR coordinates an extensive Coastal Monitoring Program that includes high resolution temperature monitoring.
+- We also measure dissolved oxygen and sometimes salinity at these locations, but temperature is the important one for this analysis.
+- So far we have processed data from 190 deployments at 86 different locations, which you can see in the figure here
+- We have pretty good coverage around the province, particularly along the Eastern Shore up to Guysborough county, and over in St. Marys Bay.
 
 
 ---
@@ -147,17 +163,29 @@ Relates initial weight and final weight based on the average temperature over a 
 .panelset[
 
 .panel[.panel-name[Flat Island]
-
+&lt;img src="index_files/figure-html/unnamed-chunk-3-1.png" width="1080" /&gt;
 ]
-
 .panel[.panel-name[Beaver Point]
+&lt;img src="index_files/figure-html/unnamed-chunk-4-1.png" width="1080" /&gt;
+]
+]
 
-]
-]
+???
+- Here is an example of temperature data from Flat Island in Lunenburg County, just outside of Mahone Bay.
+- This is data for about 3.5 years, from May 2018 to November 2021
+- There are 5 different depths, represented by colour
+- You can see the temperature is pretty well stratified in the summmer months, but is much more well mixed in the winter.
+
+- Just another quick example. 
+- This is for Beaver Point on the Eastern Shore of Halifax county. 
+- Nearly 4 years of data for 4 different depths
 
 ---
 class: center
-# **ANALYSIS**
+# **ANALYSIS &amp; RESULTS**
+
+???
+- Now I'm going to move into some of the details of our analysis and preliminary results
 
 Identify Growing Seasons
 
@@ -180,16 +208,25 @@ Apply TGC Model
 ]
 
 .panel[.panel-name[Season Table]
-
-<div id="htmlwidget-97c9eda7b810f0f83a1a" style="width:100%;height:auto;" class="datatables html-widget"></div>
-<script type="application/json" data-for="htmlwidget-97c9eda7b810f0f83a1a">{"x":{"filter":"none","vertical":false,"data":[["Madeline Point","Madeline Point","Madeline Point","Madeline Point","Madeline Point","Beaver Point","Beaver Point","Beaver Point","Beaver Point","Flat Island","Flat Island","Flat Island","Flat Island","Flat Island"],["2","5","10","15","22","2","5","10","15","2","5","10","15","20"],["2019-06-17","2019-06-17","2019-06-22","2019-06-22","2019-06-23","2018-05-21","2018-05-27","2018-05-31","2018-07-11","2019-05-01","2019-05-08","2019-05-19","2019-05-19","2019-06-19"],["2020-02-15","2020-02-22","2020-02-22","2020-02-15","2020-02-15","2019-02-22","2019-02-22","2019-02-22","2019-01-20","2020-10-22","2020-10-29","2020-11-09","2020-11-09","2020-12-10"],[243.02,249.6,244.45,237.59,236.42,276.3,271.16,267.48,193.08,540,540,540,539.99,540]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>STATION<\/th>\n      <th>DEPTH<\/th>\n      <th>START_SEASON<\/th>\n      <th>END_SEASON<\/th>\n      <th>STOCKED_DAYS<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"ft","paging":false,"searching":true,"scrollY":"225px","scrollX":"500px","pageLength":500,"columnDefs":[{"className":"dt-center","targets":"_all"}],"order":[],"autoWidth":false,"orderClasses":false,"lengthMenu":[10,25,50,100,500]}},"evals":[],"jsHooks":[]}</script>
-
+<div id="htmlwidget-1ccc3ba79487df64c7f6" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-1ccc3ba79487df64c7f6">{"x":{"filter":"none","vertical":false,"data":[["Madeline Point","Madeline Point","Madeline Point","Madeline Point","Madeline Point","Beaver Point","Beaver Point","Beaver Point","Beaver Point","Flat Island","Flat Island","Flat Island","Flat Island","Flat Island"],["2","5","10","15","22","2","5","10","15","2","5","10","15","20"],["2019-06-17","2019-06-17","2019-06-22","2019-06-22","2019-06-23","2018-05-21","2018-05-27","2018-05-31","2018-07-11","2019-05-01","2019-05-08","2019-05-19","2019-05-19","2019-06-19"],["2020-02-15","2020-02-22","2020-02-22","2020-02-15","2020-02-15","2019-02-22","2019-02-22","2019-02-22","2019-01-20","2020-10-22","2020-10-29","2020-11-09","2020-11-09","2020-12-10"],[243.02,249.6,244.45,237.59,236.42,276.3,271.16,267.48,193.08,540,540,540,539.99,540]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>STATION<\/th>\n      <th>DEPTH<\/th>\n      <th>START_SEASON<\/th>\n      <th>END_SEASON<\/th>\n      <th>STOCKED_DAYS<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"ft","paging":false,"searching":true,"scrollY":"225px","scrollX":"500px","pageLength":500,"columnDefs":[{"className":"dt-center","targets":"_all"}],"initComplete":"function(settings, json) {\n$(this.api().table().container()).css({'font-size': '75%'});\n}","order":[],"autoWidth":false,"orderClasses":false,"lengthMenu":[10,25,50,100,500]}},"evals":["options.initComplete"],"jsHooks":[]}</script>
 ]
 ]
 
+???
+- The first thing I did was tell the code to look through all the temperature data from all of the locations we just saw and assign growing seasons, i.e., a date when fish could theoretically be put into the water, and when they would be removed.
+- Based on advice provided by Roland, the season starts when the temperature exceeds the 4-degree threshold, which is marked by the dashed grey line in the figure, and doesn't go back down below it, 
+- The season ends at the first observation before superchill, which is indicated by the blue shaded region.
+- If there is no superchill, then the season ends after 18 months
 
 
+- This figure shows one season of data for Beaver Point.
 
+- I realize that it is not 
+
+- Obviously it is much easier to define the seasons this way in retrospect  
+
+- did this for all stations + depths
 
 ---
 
@@ -199,29 +236,141 @@ Apply TGC Model
 - 3 examples  
   - Short season (&lt; 8.5 months)
   - Medium season (8.5 - 17 months)
-  - Long season ($\ge$ 17 months)
+  - Long season ( `\(\ge\)` 17 months)
 
 - Data gaps &lt; 2 days
 - At least 3 depths (2 m, 5 m, 10 m)
 ]
 
 .pull-right[
+<div id="htmlwidget-d61e896e970e3d56c2f1" style="width:504px;height:504px;" class="leaflet html-widget"></div>
+<script type="application/json" data-for="htmlwidget-d61e896e970e3d56c2f1">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addProviderTiles","args":["CartoDB.Positron",null,null,{"errorTileUrl":"","noWrap":false,"detectRetina":false}]},{"method":"addCircleMarkers","args":[45.26751,-60.97922,8,null,null,{"interactive":true,"className":"","stroke":false,"color":"#03F","weight":5,"opacity":0.5,"fill":true,"fillColor":"blue","fillOpacity":0.5},null,null,null,null,"Madeline Point",{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},null]},{"method":"addCircleMarkers","args":[44.87761,-62.39922,8,null,null,{"interactive":true,"className":"","stroke":false,"color":"#03F","weight":5,"opacity":0.5,"fill":true,"fillColor":"orange","fillOpacity":0.5},null,null,null,null,"Beaver Point",{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},null]},{"method":"addCircleMarkers","args":[44.43346,-64.1312,8,null,null,{"interactive":true,"className":"","stroke":false,"color":"#03F","weight":5,"opacity":0.5,"fill":true,"fillColor":"red","fillOpacity":0.5},null,null,null,null,"Flat Island",{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},null]}],"limits":{"lat":[44.43346,45.26751],"lng":[-64.1312,-60.97922]}},"evals":[],"jsHooks":[]}</script>
+]
+
+???
+- for &gt; 17 months, say no superchill
+
+---
+# Growing Days
+
+Assume no growth for 24 hours after observation `\(\ge\)` 18 degrees Celsius 
 
 
 
+.panelset[
+
+.panel[.panel-name[Short]
+
+&lt;img src="index_files/figure-html/unnamed-chunk-9-1.png" width="1116" /&gt;
+
+]
+.panel[.panel-name[Medium]
+
+&lt;img src="index_files/figure-html/unnamed-chunk-10-1.png" width="1116" /&gt;
+
+]
+.panel[.panel-name[Long]
+
+&lt;img src="index_files/figure-html/unnamed-chunk-11-1.png" width="1116" /&gt;
+
+]
+
+.panel[.panel-name[Season Table]
+
+<div id="htmlwidget-27b2b60885f43ea1b555" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-27b2b60885f43ea1b555">{"x":{"filter":"none","vertical":false,"data":[["Madeline Point","Madeline Point","Madeline Point","Madeline Point","Madeline Point","Beaver Point","Beaver Point","Beaver Point","Beaver Point","Flat Island","Flat Island","Flat Island","Flat Island","Flat Island"],["2","5","10","15","22","2","5","10","15","2","5","10","15","20"],["2019-06-17","2019-06-17","2019-06-22","2019-06-22","2019-06-23","2018-05-21","2018-05-27","2018-05-31","2018-07-11","2019-05-01","2019-05-08","2019-05-19","2019-05-19","2019-06-19"],["2020-02-15","2020-02-22","2020-02-22","2020-02-15","2020-02-15","2019-02-22","2019-02-22","2019-02-22","2019-01-20","2020-10-22","2020-10-29","2020-11-09","2020-11-09","2020-12-10"],[243.02,249.6,244.45,237.59,236.42,276.3,271.16,267.48,193.08,540,540,540,539.99,540],[30.98,27.12,21.14,15.54,3.46,26.14,21.93,12.14,5.04,17.45,9.67,0,0,0],[212.04,222.49,223.31,222.05,232.96,250.16,249.23,255.34,188.04,522.55,530.32,540,539.99,540]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>STATION<\/th>\n      <th>DEPTH<\/th>\n      <th>START_SEASON<\/th>\n      <th>END_SEASON<\/th>\n      <th>STOCKED_DAYS<\/th>\n      <th>n_filtered_days<\/th>\n      <th>n_growing_days<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"ft","paging":false,"searching":true,"scrollY":"225px","scrollX":"500px","pageLength":500,"columnDefs":[{"className":"dt-center","targets":"_all"}],"initComplete":"function(settings, json) {\n$(this.api().table().container()).css({'font-size': '75%'});\n}","order":[],"autoWidth":false,"orderClasses":false,"lengthMenu":[10,25,50,100,500]}},"evals":["options.initComplete"],"jsHooks":[]}</script>
+
+]
+]
+
+---
+# Degree Days
+
+text text
+
+.panelset[
+
+.panel[.panel-name[Figure]
+
+<div id="htmlwidget-2ff5220126d468d41791" style="width:1080px;height:338.4px;" class="plotly html-widget"></div>
+<script type="application/json" data-for="htmlwidget-2ff5220126d468d41791">{"x":{"data":[{"x":[1,2,3],"y":[1751.03,2246.94,4239.97],"text":["Depth:  2 m <br /> Average Temp:  8.258 <br /> Growing Days:  212.04 <br /> Degree Days:  1751.03","Depth:  2 m <br /> Average Temp:  8.982 <br /> Growing Days:  250.16 <br /> Degree Days:  2246.94","Depth:  2 m <br /> Average Temp:  8.114 <br /> Growing Days:  522.55 <br /> Degree Days:  4239.97"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(253,231,37,1)","opacity":1,"size":15.1181102362205,"symbol":"circle","line":{"width":1.88976377952756,"color":"rgba(0,0,0,1)"}},"hoveron":"points","name":"2","legendgroup":"2","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[1,2,3],"y":[1775.47,1781.5,4800.99],"text":["Depth:  5 m <br /> Average Temp:  7.98 <br /> Growing Days:  222.49 <br /> Degree Days:  1775.47","Depth:  5 m <br /> Average Temp:  7.148 <br /> Growing Days:  249.23 <br /> Degree Days:  1781.5","Depth:  5 m <br /> Average Temp:  9.053 <br /> Growing Days:  530.32 <br /> Degree Days:  4800.99"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(122,209,81,1)","opacity":1,"size":15.1181102362205,"symbol":"circle","line":{"width":1.88976377952756,"color":"rgba(0,0,0,1)"}},"hoveron":"points","name":"5","legendgroup":"5","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[1,2,3],"y":[1768.17,1794.27,4349.7],"text":["Depth:  10 m <br /> Average Temp:  7.918 <br /> Growing Days:  223.31 <br /> Degree Days:  1768.17","Depth:  10 m <br /> Average Temp:  7.027 <br /> Growing Days:  255.34 <br /> Degree Days:  1794.27","Depth:  10 m <br /> Average Temp:  8.055 <br /> Growing Days:  540 <br /> Degree Days:  4349.7"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(34,168,132,1)","opacity":1,"size":15.1181102362205,"symbol":"circle","line":{"width":1.88976377952756,"color":"rgba(0,0,0,1)"}},"hoveron":"points","name":"10","legendgroup":"10","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[1,2,3],"y":[1741.54,1449.79,3852.83],"text":["Depth:  15 m <br /> Average Temp:  7.843 <br /> Growing Days:  222.05 <br /> Degree Days:  1741.54","Depth:  15 m <br /> Average Temp:  7.71 <br /> Growing Days:  188.04 <br /> Degree Days:  1449.79","Depth:  15 m <br /> Average Temp:  7.135 <br /> Growing Days:  539.99 <br /> Degree Days:  3852.83"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(42,120,142,1)","opacity":1,"size":15.1181102362205,"symbol":"circle","line":{"width":1.88976377952756,"color":"rgba(0,0,0,1)"}},"hoveron":"points","name":"15","legendgroup":"15","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[3],"y":[4120.74],"text":"Depth:  20 m <br /> Average Temp:  7.631 <br /> Growing Days:  540 <br /> Degree Days:  4120.74","type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(65,68,135,1)","opacity":1,"size":15.1181102362205,"symbol":"circle","line":{"width":1.88976377952756,"color":"rgba(0,0,0,1)"}},"hoveron":"points","name":"20","legendgroup":"20","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[1],"y":[1643.07],"text":"Depth:  22 m <br /> Average Temp:  7.053 <br /> Growing Days:  232.96 <br /> Degree Days:  1643.07","type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(68,1,84,1)","opacity":1,"size":15.1181102362205,"symbol":"circle","line":{"width":1.88976377952756,"color":"rgba(0,0,0,1)"}},"hoveron":"points","name":"22","legendgroup":"22","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null}],"layout":{"margin":{"t":39.3214117011944,"r":7.30593607305936,"b":90,"l":90},"plot_bgcolor":"rgba(255,255,255,1)","paper_bgcolor":"rgba(255,255,255,1)","font":{"color":"rgba(0,0,0,1)","family":"","size":21.2536322125363},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[0.4,3.6],"tickmode":"array","ticktext":["Madeline Point","Beaver Point","Flat Island"],"tickvals":[1,2,3],"categoryorder":"array","categoryarray":["Madeline Point","Beaver Point","Flat Island"],"nticks":null,"ticks":"outside","tickcolor":"rgba(179,179,179,1)","ticklen":3.65296803652968,"tickwidth":0.33208800332088,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":17.0029057700291},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(222,222,222,1)","gridwidth":0.33208800332088,"zeroline":false,"anchor":"y","title":{"text":"","font":{"color":"rgba(0,0,0,1)","family":"","size":21.2536322125363}},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[1282.23,4968.55],"tickmode":"array","ticktext":["2000","3000","4000"],"tickvals":[2000,3000,4000],"categoryorder":"array","categoryarray":["2000","3000","4000"],"nticks":null,"ticks":"outside","tickcolor":"rgba(179,179,179,1)","ticklen":3.65296803652968,"tickwidth":0.33208800332088,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":17.0029057700291},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(222,222,222,1)","gridwidth":0.33208800332088,"zeroline":false,"anchor":"x","title":{"text":"Number of Degree Days","font":{"color":"rgba(0,0,0,1)","family":"","size":21.2536322125363}},"hoverformat":".2f"},"shapes":[{"type":"rect","fillcolor":"transparent","line":{"color":"rgba(179,179,179,1)","width":0.66417600664176,"linetype":"solid"},"yref":"paper","xref":"paper","x0":0,"x1":1,"y0":0,"y1":1}],"showlegend":true,"legend":{"bgcolor":"rgba(255,255,255,1)","bordercolor":"transparent","borderwidth":1.88976377952756,"font":{"color":"rgba(0,0,0,1)","family":"","size":17.0029057700291},"title":{"text":"Depth (m)","font":{"color":"rgba(0,0,0,1)","family":"","size":21.2536322125363}}},"hovermode":"closest","barmode":"relative"},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false,"modeBarButtonsToRemove":["toggleSpikelines","autoScale2d","select2d","lasso2d","hoverCompareCartesian","zoom2d"],"displaylogo":false,"toImageButtonOptions":{"format":"png","filename":"degree_days","width":1100,"height":1100}},"source":"A","attrs":{"aa406db1425d":{"x":{},"y":{},"fill":{},"text":{},"type":"scatter"}},"cur_data":"aa406db1425d","visdat":{"aa406db1425d":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+
+]
+
+.panel[.panel-name[Table]
+
+<div id="htmlwidget-86bca2cda6d07870beef" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-86bca2cda6d07870beef">{"x":{"filter":"none","vertical":false,"data":[["Madeline Point","Madeline Point","Madeline Point","Madeline Point","Madeline Point","Beaver Point","Beaver Point","Beaver Point","Beaver Point","Flat Island","Flat Island","Flat Island","Flat Island","Flat Island"],["2","5","10","15","22","2","5","10","15","2","5","10","15","20"],["2019-06-17","2019-06-17","2019-06-22","2019-06-22","2019-06-23","2018-05-21","2018-05-27","2018-05-31","2018-07-11","2019-05-01","2019-05-08","2019-05-19","2019-05-19","2019-06-19"],["2020-02-15","2020-02-22","2020-02-22","2020-02-15","2020-02-15","2019-02-22","2019-02-22","2019-02-22","2019-01-20","2020-10-22","2020-10-29","2020-11-09","2020-11-09","2020-12-10"],[243.02,249.6,244.45,237.59,236.42,276.3,271.16,267.48,193.08,540,540,540,539.99,540],[30.98,27.12,21.14,15.54,3.46,26.14,21.93,12.14,5.04,17.45,9.67,0,0,0],[212.04,222.49,223.31,222.05,232.96,250.16,249.23,255.34,188.04,522.55,530.32,540,539.99,540],[8.258,7.98,7.918,7.843,7.053,8.982,7.148,7.027,7.71,8.114,9.053,8.055,7.135,7.631],[1751.03,1775.47,1768.17,1741.54,1643.07,2246.94,1781.5,1794.27,1449.79,4239.97,4800.99,4349.7,3852.83,4120.74]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>STATION<\/th>\n      <th>DEPTH<\/th>\n      <th>START_SEASON<\/th>\n      <th>END_SEASON<\/th>\n      <th>STOCKED_DAYS<\/th>\n      <th>n_filtered_days<\/th>\n      <th>n_growing_days<\/th>\n      <th>AVG_TEMPERATURE<\/th>\n      <th>n_degree_days<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"ft","paging":false,"searching":true,"scrollY":"225px","scrollX":"500px","pageLength":500,"columnDefs":[{"className":"dt-center","targets":"_all"}],"initComplete":"function(settings, json) {\n$(this.api().table().container()).css({'font-size': '75%'});\n}","order":[],"autoWidth":false,"orderClasses":false,"lengthMenu":[10,25,50,100,500]}},"evals":["options.initComplete"],"jsHooks":[]}</script>
+
+]
+]
+
+???
+Note: Partial STOCKED_DAYS caused by the times of END_SEASON and START_SEASON (not shown).
+
+---
+# TGC Model Results
+
+**How big does a post-smolt salmon need to be to grow to market size at a given location?**
+
+<div id="htmlwidget-9103ac417e9912ade1f1" style="width:1080px;height:396px;" class="plotly html-widget"></div>
+<script type="application/json" data-for="htmlwidget-9103ac417e9912ade1f1">{"x":{"data":[{"x":[1,2,3],"y":[2.339,1.906,1.5301],"text":["Depth:  2 m <br /> Average Temp:  8.258 <br /> Growing Days:  212.04 <br /> Degree Days:  1751.03 <br /> Initial Weight:  2.339","Depth:  2 m <br /> Average Temp:  8.258 <br /> Growing Days:  212.04 <br /> Degree Days:  1751.03 <br /> Initial Weight:  1.906","Depth:  2 m <br /> Average Temp:  8.258 <br /> Growing Days:  212.04 <br /> Degree Days:  1751.03 <br /> Initial Weight:  1.5301"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(253,231,37,1)","opacity":0.75,"size":11.3385826771654,"symbol":"circle","line":{"width":1.88976377952756,"color":"rgba(0,0,0,1)"}},"hoveron":"points","name":"2","legendgroup":"2","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[1,2,3],"y":[1.7429,1.2989,0.9376],"text":["Depth:  2 m <br /> Average Temp:  8.982 <br /> Growing Days:  250.16 <br /> Degree Days:  2246.94 <br /> Initial Weight:  1.7429","Depth:  2 m <br /> Average Temp:  8.982 <br /> Growing Days:  250.16 <br /> Degree Days:  2246.94 <br /> Initial Weight:  1.2989","Depth:  2 m <br /> Average Temp:  8.982 <br /> Growing Days:  250.16 <br /> Degree Days:  2246.94 <br /> Initial Weight:  0.9376"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(253,231,37,1)","opacity":0.75,"size":11.3385826771654,"symbol":"circle","line":{"width":1.88976377952756,"color":"rgba(0,0,0,1)"}},"hoveron":"points","name":"2","legendgroup":"2","showlegend":false,"xaxis":"x2","yaxis":"y","hoverinfo":"text","frame":null},{"x":[1,2,3],"y":[0.3507,0.12,0.0222],"text":["Depth:  2 m <br /> Average Temp:  8.114 <br /> Growing Days:  522.55 <br /> Degree Days:  4239.97 <br /> Initial Weight:  0.3507","Depth:  2 m <br /> Average Temp:  8.114 <br /> Growing Days:  522.55 <br /> Degree Days:  4239.97 <br /> Initial Weight:  0.12","Depth:  2 m <br /> Average Temp:  8.114 <br /> Growing Days:  522.55 <br /> Degree Days:  4239.97 <br /> Initial Weight:  0.0222"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(253,231,37,1)","opacity":0.75,"size":11.3385826771654,"symbol":"circle","line":{"width":1.88976377952756,"color":"rgba(0,0,0,1)"}},"hoveron":"points","name":"2","legendgroup":"2","showlegend":false,"xaxis":"x3","yaxis":"y","hoverinfo":"text","frame":null},{"x":[1,2,3],"y":[2.3068,1.8724,1.4963],"text":["Depth:  5 m <br /> Average Temp:  7.98 <br /> Growing Days:  222.49 <br /> Degree Days:  1775.47 <br /> Initial Weight:  2.3068","Depth:  5 m <br /> Average Temp:  7.98 <br /> Growing Days:  222.49 <br /> Degree Days:  1775.47 <br /> Initial Weight:  1.8724","Depth:  5 m <br /> Average Temp:  7.98 <br /> Growing Days:  222.49 <br /> Degree Days:  1775.47 <br /> Initial Weight:  1.4963"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(122,209,81,1)","opacity":0.75,"size":11.3385826771654,"symbol":"circle","line":{"width":1.88976377952756,"color":"rgba(0,0,0,1)"}},"hoveron":"points","name":"5","legendgroup":"5","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[1,2,3],"y":[2.2989,1.8642,1.488],"text":["Depth:  5 m <br /> Average Temp:  7.148 <br /> Growing Days:  249.23 <br /> Degree Days:  1781.5 <br /> Initial Weight:  2.2989","Depth:  5 m <br /> Average Temp:  7.148 <br /> Growing Days:  249.23 <br /> Degree Days:  1781.5 <br /> Initial Weight:  1.8642","Depth:  5 m <br /> Average Temp:  7.148 <br /> Growing Days:  249.23 <br /> Degree Days:  1781.5 <br /> Initial Weight:  1.488"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(122,209,81,1)","opacity":0.75,"size":11.3385826771654,"symbol":"circle","line":{"width":1.88976377952756,"color":"rgba(0,0,0,1)"}},"hoveron":"points","name":"5","legendgroup":"5","showlegend":false,"xaxis":"x2","yaxis":"y","hoverinfo":"text","frame":null},{"x":[1,2,3],"y":[0.1803,0.0343,0.0006],"text":["Depth:  5 m <br /> Average Temp:  9.053 <br /> Growing Days:  530.32 <br /> Degree Days:  4800.99 <br /> Initial Weight:  0.1803","Depth:  5 m <br /> Average Temp:  9.053 <br /> Growing Days:  530.32 <br /> Degree Days:  4800.99 <br /> Initial Weight:  0.0343","Depth:  5 m <br /> Average Temp:  9.053 <br /> Growing Days:  530.32 <br /> Degree Days:  4800.99 <br /> Initial Weight:  6e-04"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(122,209,81,1)","opacity":0.75,"size":11.3385826771654,"symbol":"circle","line":{"width":1.88976377952756,"color":"rgba(0,0,0,1)"}},"hoveron":"points","name":"5","legendgroup":"5","showlegend":false,"xaxis":"x3","yaxis":"y","hoverinfo":"text","frame":null},{"x":[1,2,3],"y":[2.3164,1.8824,1.5063],"text":["Depth:  10 m <br /> Average Temp:  7.918 <br /> Growing Days:  223.31 <br /> Degree Days:  1768.17 <br /> Initial Weight:  2.3164","Depth:  10 m <br /> Average Temp:  7.918 <br /> Growing Days:  223.31 <br /> Degree Days:  1768.17 <br /> Initial Weight:  1.8824","Depth:  10 m <br /> Average Temp:  7.918 <br /> Growing Days:  223.31 <br /> Degree Days:  1768.17 <br /> Initial Weight:  1.5063"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(34,168,132,1)","opacity":0.75,"size":11.3385826771654,"symbol":"circle","line":{"width":1.88976377952756,"color":"rgba(0,0,0,1)"}},"hoveron":"points","name":"10","legendgroup":"10","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[1,2,3],"y":[2.2823,1.8468,1.4706],"text":["Depth:  10 m <br /> Average Temp:  7.027 <br /> Growing Days:  255.34 <br /> Degree Days:  1794.27 <br /> Initial Weight:  2.2823","Depth:  10 m <br /> Average Temp:  7.027 <br /> Growing Days:  255.34 <br /> Degree Days:  1794.27 <br /> Initial Weight:  1.8468","Depth:  10 m <br /> Average Temp:  7.027 <br /> Growing Days:  255.34 <br /> Degree Days:  1794.27 <br /> Initial Weight:  1.4706"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(34,168,132,1)","opacity":0.75,"size":11.3385826771654,"symbol":"circle","line":{"width":1.88976377952756,"color":"rgba(0,0,0,1)"}},"hoveron":"points","name":"10","legendgroup":"10","showlegend":false,"xaxis":"x2","yaxis":"y","hoverinfo":"text","frame":null},{"x":[1,2,3],"y":[0.3113,0.0975,0.0143],"text":["Depth:  10 m <br /> Average Temp:  8.055 <br /> Growing Days:  540 <br /> Degree Days:  4349.7 <br /> Initial Weight:  0.3113","Depth:  10 m <br /> Average Temp:  8.055 <br /> Growing Days:  540 <br /> Degree Days:  4349.7 <br /> Initial Weight:  0.0975","Depth:  10 m <br /> Average Temp:  8.055 <br /> Growing Days:  540 <br /> Degree Days:  4349.7 <br /> Initial Weight:  0.0143"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(34,168,132,1)","opacity":0.75,"size":11.3385826771654,"symbol":"circle","line":{"width":1.88976377952756,"color":"rgba(0,0,0,1)"}},"hoveron":"points","name":"10","legendgroup":"10","showlegend":false,"xaxis":"x3","yaxis":"y","hoverinfo":"text","frame":null},{"x":[1,2,3],"y":[2.3515,1.9192,1.5433],"text":["Depth:  15 m <br /> Average Temp:  7.843 <br /> Growing Days:  222.05 <br /> Degree Days:  1741.54 <br /> Initial Weight:  2.3515","Depth:  15 m <br /> Average Temp:  7.843 <br /> Growing Days:  222.05 <br /> Degree Days:  1741.54 <br /> Initial Weight:  1.9192","Depth:  15 m <br /> Average Temp:  7.843 <br /> Growing Days:  222.05 <br /> Degree Days:  1741.54 <br /> Initial Weight:  1.5433"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(42,120,142,1)","opacity":0.75,"size":11.3385826771654,"symbol":"circle","line":{"width":1.88976377952756,"color":"rgba(0,0,0,1)"}},"hoveron":"points","name":"15","legendgroup":"15","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[1,2,3],"y":[2.7601,2.3539,1.9897],"text":["Depth:  15 m <br /> Average Temp:  7.71 <br /> Growing Days:  188.04 <br /> Degree Days:  1449.79 <br /> Initial Weight:  2.7601","Depth:  15 m <br /> Average Temp:  7.71 <br /> Growing Days:  188.04 <br /> Degree Days:  1449.79 <br /> Initial Weight:  2.3539","Depth:  15 m <br /> Average Temp:  7.71 <br /> Growing Days:  188.04 <br /> Degree Days:  1449.79 <br /> Initial Weight:  1.9897"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(42,120,142,1)","opacity":0.75,"size":11.3385826771654,"symbol":"circle","line":{"width":1.88976377952756,"color":"rgba(0,0,0,1)"}},"hoveron":"points","name":"15","legendgroup":"15","showlegend":false,"xaxis":"x2","yaxis":"y","hoverinfo":"text","frame":null},{"x":[1,2,3],"y":[0.5158,0.2262,0.0723],"text":["Depth:  15 m <br /> Average Temp:  7.135 <br /> Growing Days:  539.99 <br /> Degree Days:  3852.83 <br /> Initial Weight:  0.5158","Depth:  15 m <br /> Average Temp:  7.135 <br /> Growing Days:  539.99 <br /> Degree Days:  3852.83 <br /> Initial Weight:  0.2262","Depth:  15 m <br /> Average Temp:  7.135 <br /> Growing Days:  539.99 <br /> Degree Days:  3852.83 <br /> Initial Weight:  0.0723"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(42,120,142,1)","opacity":0.75,"size":11.3385826771654,"symbol":"circle","line":{"width":1.88976377952756,"color":"rgba(0,0,0,1)"}},"hoveron":"points","name":"15","legendgroup":"15","showlegend":false,"xaxis":"x3","yaxis":"y","hoverinfo":"text","frame":null},{"x":[1,2,3],"y":[0.397,0.148,0.0337],"text":["Depth:  20 m <br /> Average Temp:  7.631 <br /> Growing Days:  540 <br /> Degree Days:  4120.74 <br /> Initial Weight:  0.397","Depth:  20 m <br /> Average Temp:  7.631 <br /> Growing Days:  540 <br /> Degree Days:  4120.74 <br /> Initial Weight:  0.148","Depth:  20 m <br /> Average Temp:  7.631 <br /> Growing Days:  540 <br /> Degree Days:  4120.74 <br /> Initial Weight:  0.0337"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(65,68,135,1)","opacity":0.75,"size":11.3385826771654,"symbol":"circle","line":{"width":1.88976377952756,"color":"rgba(0,0,0,1)"}},"hoveron":"points","name":"20","legendgroup":"20","showlegend":true,"xaxis":"x3","yaxis":"y","hoverinfo":"text","frame":null},{"x":[1,2,3],"y":[2.4845,2.0593,1.6856],"text":["Depth:  22 m <br /> Average Temp:  7.053 <br /> Growing Days:  232.96 <br /> Degree Days:  1643.07 <br /> Initial Weight:  2.4845","Depth:  22 m <br /> Average Temp:  7.053 <br /> Growing Days:  232.96 <br /> Degree Days:  1643.07 <br /> Initial Weight:  2.0593","Depth:  22 m <br /> Average Temp:  7.053 <br /> Growing Days:  232.96 <br /> Degree Days:  1643.07 <br /> Initial Weight:  1.6856"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(68,1,84,1)","opacity":0.75,"size":11.3385826771654,"symbol":"circle","line":{"width":1.88976377952756,"color":"rgba(0,0,0,1)"}},"hoveron":"points","name":"22","legendgroup":"22","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null}],"layout":{"margin":{"t":52.9281859692819,"r":7.30593607305936,"b":90,"l":90},"plot_bgcolor":"rgba(255,255,255,1)","paper_bgcolor":"rgba(255,255,255,1)","font":{"color":"rgba(0,0,0,1)","family":"","size":21.2536322125363},"xaxis":{"domain":[0,0.331642144427533],"automargin":true,"type":"linear","autorange":false,"range":[0.4,3.6],"tickmode":"array","ticktext":["0.25","0.3","0.35"],"tickvals":[1,2,3],"categoryorder":"array","categoryarray":["0.25","0.3","0.35"],"nticks":null,"ticks":"outside","tickcolor":"rgba(179,179,179,1)","ticklen":3.65296803652968,"tickwidth":0.33208800332088,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":17.0029057700291},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(222,222,222,1)","gridwidth":0.33208800332088,"zeroline":false,"anchor":"y","title":"","hoverformat":".2f"},"annotations":[{"text":"TGC Value","x":0.5,"y":0,"showarrow":false,"ax":0,"ay":0,"font":{"color":"rgba(0,0,0,1)","family":"","size":21.2536322125363},"xref":"paper","yref":"paper","textangle":-0,"xanchor":"center","yanchor":"top","annotationType":"axis","yshift":-27.2312162723122},{"text":"Initial Weight (kg)","x":0,"y":0.5,"showarrow":false,"ax":0,"ay":0,"font":{"color":"rgba(0,0,0,1)","family":"","size":21.2536322125363},"xref":"paper","yref":"paper","textangle":-90,"xanchor":"right","yanchor":"center","annotationType":"axis","xshift":-18.7297633872976},{"text":"Madeline Point","x":0.165821072213766,"y":1,"showarrow":false,"ax":0,"ay":0,"font":{"color":"rgba(255,255,255,1)","family":"","size":17.0029057700291},"xref":"paper","yref":"paper","textangle":-0,"xanchor":"center","yanchor":"bottom"},{"text":"Beaver Point","x":0.5,"y":1,"showarrow":false,"ax":0,"ay":0,"font":{"color":"rgba(255,255,255,1)","family":"","size":17.0029057700291},"xref":"paper","yref":"paper","textangle":-0,"xanchor":"center","yanchor":"bottom"},{"text":"Flat Island","x":0.834178927786234,"y":1,"showarrow":false,"ax":0,"ay":0,"font":{"color":"rgba(255,255,255,1)","family":"","size":17.0029057700291},"xref":"paper","yref":"paper","textangle":-0,"xanchor":"center","yanchor":"bottom"}],"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[-0.137375,2.898075],"tickmode":"array","ticktext":["0","1","2"],"tickvals":[0,1,2],"categoryorder":"array","categoryarray":["0","1","2"],"nticks":null,"ticks":"outside","tickcolor":"rgba(179,179,179,1)","ticklen":3.65296803652968,"tickwidth":0.33208800332088,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":17.0029057700291},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(222,222,222,1)","gridwidth":0.33208800332088,"zeroline":false,"anchor":"x","title":"","hoverformat":".2f"},"shapes":[{"type":"rect","fillcolor":"transparent","line":{"color":"rgba(179,179,179,1)","width":0.66417600664176,"linetype":"solid"},"yref":"paper","xref":"paper","x0":0,"x1":0.331642144427533,"y0":0,"y1":1},{"type":"rect","fillcolor":"rgba(179,179,179,1)","line":{"color":"transparent","width":0.66417600664176,"linetype":"solid"},"yref":"paper","xref":"paper","x0":0,"x1":0.331642144427533,"y0":0,"y1":28.692403486924,"yanchor":1,"ysizemode":"pixel"},{"type":"rect","fillcolor":"transparent","line":{"color":"rgba(179,179,179,1)","width":0.66417600664176,"linetype":"solid"},"yref":"paper","xref":"paper","x0":0.335024522239134,"x1":0.664975477760866,"y0":0,"y1":1},{"type":"rect","fillcolor":"rgba(179,179,179,1)","line":{"color":"transparent","width":0.66417600664176,"linetype":"solid"},"yref":"paper","xref":"paper","x0":0.335024522239134,"x1":0.664975477760866,"y0":0,"y1":28.692403486924,"yanchor":1,"ysizemode":"pixel"},{"type":"rect","fillcolor":"transparent","line":{"color":"rgba(179,179,179,1)","width":0.66417600664176,"linetype":"solid"},"yref":"paper","xref":"paper","x0":0.668357855572467,"x1":1,"y0":0,"y1":1},{"type":"rect","fillcolor":"rgba(179,179,179,1)","line":{"color":"transparent","width":0.66417600664176,"linetype":"solid"},"yref":"paper","xref":"paper","x0":0.668357855572467,"x1":1,"y0":0,"y1":28.692403486924,"yanchor":1,"ysizemode":"pixel"}],"xaxis2":{"type":"linear","autorange":false,"range":[0.4,3.6],"tickmode":"array","ticktext":["0.25","0.3","0.35"],"tickvals":[1,2,3],"categoryorder":"array","categoryarray":["0.25","0.3","0.35"],"nticks":null,"ticks":"outside","tickcolor":"rgba(179,179,179,1)","ticklen":3.65296803652968,"tickwidth":0.33208800332088,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":17.0029057700291},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"domain":[0.335024522239134,0.664975477760866],"gridcolor":"rgba(222,222,222,1)","gridwidth":0.33208800332088,"zeroline":false,"anchor":"y","title":"","hoverformat":".2f"},"xaxis3":{"type":"linear","autorange":false,"range":[0.4,3.6],"tickmode":"array","ticktext":["0.25","0.3","0.35"],"tickvals":[1,2,3],"categoryorder":"array","categoryarray":["0.25","0.3","0.35"],"nticks":null,"ticks":"outside","tickcolor":"rgba(179,179,179,1)","ticklen":3.65296803652968,"tickwidth":0.33208800332088,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":17.0029057700291},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"domain":[0.668357855572467,1],"gridcolor":"rgba(222,222,222,1)","gridwidth":0.33208800332088,"zeroline":false,"anchor":"y","title":"","hoverformat":".2f"},"showlegend":true,"legend":{"bgcolor":"rgba(255,255,255,1)","bordercolor":"transparent","borderwidth":1.88976377952756,"font":{"color":"rgba(0,0,0,1)","family":"","size":17.0029057700291},"title":{"text":"Depth (m)","font":{"color":"rgba(0,0,0,1)","family":"","size":21.2536322125363}}},"hovermode":"closest","barmode":"relative"},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false,"modeBarButtonsToRemove":["toggleSpikelines","autoScale2d","select2d","lasso2d","hoverCompareCartesian","zoom2d"],"displaylogo":false,"toImageButtonOptions":{"format":"png","filename":"degree_days","width":1100,"height":1100}},"source":"A","attrs":{"aa40684d366b":{"x":{},"y":{},"fill":{},"text":{},"type":"scatter"}},"cur_data":"aa40684d366b","visdat":{"aa40684d366b":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+
+???
+- Thanks to Bruce/Gregor for giving me a chance to tell you about this work
+- Questions
+- Hot off the press!
+
+---
+# Disscussion/Conclusions?
 
 
+---
+# Next Steps
 
 
+---
+# Extra Slides
+
+---
+# Thermal Growth Coefficient Model
+
+Relates initial weight and final weight based on the average temperature over a period of time
+
+$$
+w_0 = (w_t^{1/3} - \frac{TGC}{1000} * degreedays)^3
+$$
+
+`$$degreedays = T_{Avg} * n_{days}$$`
+--
+
+- `\(w_0\)` = initial stocking weight (kg)
+- `\(w_t\)` = final weight after grow-out (kg)
+- `\(TGC\)` = thermal growth coefficient (remedial = 0.25, average = 0.30, elite = 0.35)
+- `\(degreedays\)` = degree days experienced by fish over growing season
+- `\(T_{Avg}\)` = average temperature over the growing season*
+- `\(n_{days}\)` = number of days in the growing season*
+
+*Assume no growth for 24 hours after observation `\(\ge\)` 18 degrees Celsius 
 
 
+???
+
+ALT text: How big does a post-smolt salmon need to be to grow out to market size at a given location?
 
 
+- To explore this potential, we are using the thermal growth coefficient model
+
+- Common model that relates final weight and initial weight of a fish based on the average temperature it experiences over a given period of time
+
+(observations in this window are removed and not included in `\(T_{Avg}\)` or `\(n_{days}\)`)
 
 
+---
+# Season Length
 
-
-
+<div id="htmlwidget-b6c290fdd8381115ae36" style="width:1080px;height:504px;" class="leaflet html-widget"></div>
+<script type="application/json" data-for="htmlwidget-b6c290fdd8381115ae36">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addProviderTiles","args":["CartoDB.Positron",null,null,{"errorTileUrl":"","noWrap":false,"detectRetina":false}]},{"method":"addCircleMarkers","args":[[45.35078,45.26784,45.25872,45.15496,45.52511,45.27063,45.56078],[-61.26832,-60.97956,-60.99914,-61.39882,-61.25595,-61.135,-60.76142],8,null,null,{"interactive":true,"className":"","stroke":false,"color":"#03F","weight":5,"opacity":0.5,"fill":true,"fillColor":"blue","fillOpacity":0.5},null,null,null,null,["Rook Island","Madeline Point","Seal Cove","The Bull","Eddy Cove","Northeast Branch","Red Point"],{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},null]},{"method":"addCircleMarkers","args":[[45.10183,45.07278,44.87761,44.43346,43.7210203567927,43.7210203567927,43.68447],[-61.6298,-61.8605,-62.39922,-64.1312,-65.8457420580702,-65.8457420580702,-65.83601],8,null,null,{"interactive":true,"className":"","stroke":false,"color":"#03F","weight":5,"opacity":0.5,"fill":true,"fillColor":"orange","fillOpacity":0.5},null,null,null,null,["Meal Rock","Wine Harbour","Beaver Point","Flat Island","Old Point Channel","Old Point Channel","Ram Island"],{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},null]},{"method":"addCircleMarkers","args":[[45.39955,45.3595,44.87649,44.50116,44.55768,44.81794,44.56983,44.56975,44.43346,44.43732,45.49823692,43.52369502],[-61.42,-61.41852,-62.40017,-63.81413,-63.95343,-62.61881,-64.03411,-64.03448,-64.1312,-64.25055,-61.01930751,-65.35572913],8,null,null,{"interactive":true,"className":"","stroke":false,"color":"#03F","weight":5,"opacity":0.5,"fill":true,"fillColor":"red","fillOpacity":0.5},null,null,null,null,["Moose Point","Sandy Cove Chedabucto","Beaver Point","Shad Bay","Shut-In Island","Spry Harbour","Birchy Head","Birchy Head","Flat Island","Little Rafuse Island","Kavanagh Point","Ingomar"],{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},null]}],"limits":{"lat":[43.52369502,45.56078],"lng":[-65.8457420580702,-60.76142]}},"evals":[],"jsHooks":[]}</script>
 
 
 
