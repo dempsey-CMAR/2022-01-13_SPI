@@ -9,7 +9,7 @@
     <link href="libs/panelset-0.2.6/panelset.css" rel="stylesheet" />
     <script src="libs/panelset-0.2.6/panelset.js"></script>
     <script src="libs/htmlwidgets-1.5.4/htmlwidgets.js"></script>
-    <script src="libs/jquery-1.12.4/jquery.min.js"></script>
+    <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
     <link href="libs/leaflet-1.3.1/leaflet.css" rel="stylesheet" />
     <script src="libs/leaflet-1.3.1/leaflet.js"></script>
     <link href="libs/leafletfix-1.0.0/leafletfix.css" rel="stylesheet" />
@@ -19,6 +19,13 @@
     <script src="libs/leaflet-binding-2.0.4.1/leaflet.js"></script>
     <script src="libs/leaflet-providers-1.9.0/leaflet-providers_1.9.0.js"></script>
     <script src="libs/leaflet-providers-plugin-2.0.4.1/leaflet-providers-plugin.js"></script>
+    <link href="libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
+    <script src="libs/datatables-binding-0.19/datatables.js"></script>
+    <link href="libs/dt-core-1.10.20/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <link href="libs/dt-core-1.10.20/css/jquery.dataTables.extra.css" rel="stylesheet" />
+    <script src="libs/dt-core-1.10.20/js/jquery.dataTables.min.js"></script>
+    <link href="libs/crosstalk-1.1.1/css/crosstalk.css" rel="stylesheet" />
+    <script src="libs/crosstalk-1.1.1/js/crosstalk.min.js"></script>
     <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
   </head>
   <body>
@@ -38,6 +45,9 @@ background-image: url(logo2.png)
 background-position: 50% 100%
 background-size: 100%
 ---
+
+
+
 
 
 
@@ -87,43 +97,11 @@ Prior to January 2013, the maximum allowable juvenile weight was 250 g. In Janua
 
 - Larger smolts are increasingly popular in Norway, where licences for extra biomass are limited and expensive, in Tasmania, and to an increasing extent in Scotland.
 
----
-# Thermal Growth Coefficient Model
 
-Relates initial weight and final weight based on the average temperature over a period of time
-
-$$
-w_0 = (w_t^{1/3} - \frac{TGC}{1000} * degreedays)^3
-$$
-
-`$$degreedays = T_{Avg} * n_{days}$$`
---
-
-- `\(w_0\)` = initial stocking weight (kg)
-- `\(w_t\)` = final weight after grow-out (kg)
-- `\(TGC\)` = thermal growth coefficient (remedial = 0.25, average = 0.30, elite = 0.35)
-- `\(degreedays\)` = degree days experienced by fish over growing season
-- `\(T_{Avg}\)` = average temperature over the growing season*
-- `\(n_{days}\)` = number of days in the growing season*
-
-*Assume no growth for 24 hours after observation `\(\ge\)` 18 degrees Celsius 
-
-
-???
-
-ALT text: How big does a post-smolt salmon need to be to grow out to market size at a given location?
-
-
-- To explore this potential, we are using the thermal growth coefficient model
-
-- Common model that relates final weight and initial weight of a fish based on the average temperature it experiences over a given period of time
-
-(observations in this window are removed and not included in `\(T_{Avg}\)` or `\(n_{days}\)`)
 
 ---
 # Thermal Growth Coefficient Model
 
---
 **How big does a post-smolt salmon need to be to grow to market size at a given location?**
 
 $$
@@ -141,14 +119,24 @@ $$
 
 - `\(degreedays\)` = degree days experienced by fish over growing season -&gt; **empirical data**
 
+???
+
+Relates initial weight and final weight based on the average temperature over a period of time
+
+- `\(T_{Avg}\)` = average temperature over the growing season*
+- `\(n_{days}\)` = number of days in the growing season*
+
+*Assume no growth for 24 hours after observation `\(\ge\)` 18 degrees Celsius 
+
+
 ---
 # Coastal Monitoring Program
 
 - High resolution monitoring of **temperature** (plus dissolved oxygen &amp; some salinity)
 - Processed 190 deployments from 86 locations
 
-<div id="htmlwidget-e0ffc226cb84d5fbf582" style="width:1080px;height:403.2px;" class="leaflet html-widget"></div>
-<script type="application/json" data-for="htmlwidget-e0ffc226cb84d5fbf582">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addProviderTiles","args":["CartoDB.Positron",null,null,{"errorTileUrl":"","noWrap":false,"detectRetina":false}]},{"method":"addMarkers","args":[[44.634167,44.669583,44.66939,44.6782,45.6598,45.675,45.654886,45.78334450726,44.32794,44.41007,44.539117,44.503833,44.5328,44.324017,44.32015,44.401726,44.35062,44.333112,44.35013,44.485671,45.40052,45.35078,45.3586,45.35493,45.16005,45.26751,45.25846,45.10312,45.08461,44.94988,45.15527,45.52511,45.58928,45.23018,45.22564,45.25007,45.20768,45.24929,45.19943,45.25545,45.24045,45.27063,45.28693,45.23757,45.24709,45.23375,45.07278,44.87761,44.73416,44.50116,44.83858,44.77437,44.838781,44.81769,44.55768,45.59586275,45.976083,44.43346,44.43843,44.54357,44.50889,44.57130379,44.5483,45.65,45.644,45.34641,44.02611,45.4934062203816,45.50135,45.49824,45.49028,45.49823692,45.52904,45.6026,45.56094,43.68621,43.7169,43.52369502,43.46887,43.67902,43.79075,43.7210203567927,43.68447,43.7160798954253,43.69405,43.8144],[-65.711933,-65.647733,-65.64479,-65.68329,-61.904158,-61.908,-61.828774,-63.2251923345618,-65.92824,-65.996999,-65.957983,-65.932367,-65.98404,-66.135683,-66.135067,-66.159589,-66.224861,-66.202076,-66.2243,-66.059566,-61.42225,-61.26832,-61.4208,-61.03793,-61.68007,-60.97922,-60.9998,-61.63028,-61.82237,-62.01012,-61.39867,-61.25595,-61.37928,-61.25339,-61.2961,-61.29866,-61.35319,-61.14684,-61.191,-61.14594,-61.16833,-61.135,-61.16842,-61.14947,-61.15647,-61.15836,-61.8605,-62.39922,-62.81035,-63.81413,-62.51107,-62.72518,-62.471151,-62.62061,-63.95343,-61.36382192,-61.022683,-64.1312,-64.25006,-64.17342,-64.13291,-64.03512147,-64.01741,-62.525,-62.468,-62.66088,-64.66574,-61.0194651783081,-61.04197,-61.0913,-61.03831,-61.01930751,-60.92601,-60.90244,-60.7611,-65.16825,-65.008796,-65.35572913,-65.43173,-65.89818,-65.91163,-65.8457420580702,-65.83601,-65.9426905867326,-65.95942,-65.9137],null,null,null,{"interactive":true,"draggable":false,"keyboard":true,"title":"","alt":"","zIndexOffset":0,"opacity":1,"riseOnHover":false,"riseOffset":250},["County: Annapolis<\/br>Waterbody: Annapolis Basin<\/br>Station: 5005","County: Annapolis<\/br>Waterbody: Annapolis Basin<\/br>Station: 5006","County: Annapolis<\/br>Waterbody: Annapolis Basin<\/br>Station: Cornwallis","County: Annapolis<\/br>Waterbody: Annapolis Basin<\/br>Station: Lobster Ledge","County: Antigonish<\/br>Waterbody: Antigonish Harbour<\/br>Station: Southside","County: Antigonish<\/br>Waterbody: Grahams Cove<\/br>Station: Captains Pond","County: Antigonish<\/br>Waterbody: Monks Head Harbour<\/br>Station: Monks Head","County: Colchester<\/br>Waterbody: Tatamagouche Bay<\/br>Station: Malagash","County: Digby<\/br>Waterbody: Hourglass Lake<\/br>Station: Hourglass Lake","County: Digby<\/br>Waterbody: Sissiboo River<\/br>Station: Sissiboo","County: Digby<\/br>Waterbody: St. Mary's Bay<\/br>Station: 5007","County: Digby<\/br>Waterbody: St. Mary's Bay<\/br>Station: 5008","County: Digby<\/br>Waterbody: St. Mary's Bay<\/br>Station: Centreville","County: Digby<\/br>Waterbody: St. Mary's Bay<\/br>Station: Church Point 1","County: Digby<\/br>Waterbody: St. Mary's Bay<\/br>Station: Church Point 2","County: Digby<\/br>Waterbody: St. Mary's Bay<\/br>Station: Long Beach","County: Digby<\/br>Waterbody: St. Mary's Bay<\/br>Station: Long Island 1","County: Digby<\/br>Waterbody: St. Mary's Bay<\/br>Station: Long Island 2","County: Digby<\/br>Waterbody: St. Mary's Bay<\/br>Station: Long Island","County: Digby<\/br>Waterbody: St. Mary's Bay<\/br>Station: Sandy Cove St. Mary's","County: Guysborough<\/br>Waterbody: Chedabucto Bay<\/br>Station: Moose Point","County: Guysborough<\/br>Waterbody: Chedabucto Bay<\/br>Station: Rook Island","County: Guysborough<\/br>Waterbody: Chedabucto Bay<\/br>Station: Sandy Cove Chedabucto","County: Guysborough<\/br>Waterbody: Chedabucto Bay<\/br>Station: Tickle Island","County: Guysborough<\/br>Waterbody: Country Harbour<\/br>Station: 1307","County: Guysborough<\/br>Waterbody: Dover Bay<\/br>Station: Madeline Point","County: Guysborough<\/br>Waterbody: Dover Bay<\/br>Station: Seal Cove","County: Guysborough<\/br>Waterbody: Fishermans Harbour<\/br>Station: Meal Rock","County: Guysborough<\/br>Waterbody: Indian Harbour<\/br>Station: Barachois","County: Guysborough<\/br>Waterbody: Marie Joseph Harbour<\/br>Station: Barren Island","County: Guysborough<\/br>Waterbody: New Harbour<\/br>Station: The Bull","County: Guysborough<\/br>Waterbody: Strait of Canso<\/br>Station: Eddy Cove","County: Guysborough<\/br>Waterbody: Strait of Canso<\/br>Station: Pirate Harbour","County: Guysborough<\/br>Waterbody: Tor Bay<\/br>Station: Tanner Island","County: Guysborough<\/br>Waterbody: Tor Bay<\/br>Station: Center Bay","County: Guysborough<\/br>Waterbody: Tor Bay<\/br>Station: English Harbour","County: Guysborough<\/br>Waterbody: Tor Bay<\/br>Station: Larry's River","County: Guysborough<\/br>Waterbody: Whitehead Harbour<\/br>Station: The Channel","County: Guysborough<\/br>Waterbody: Whitehead Harbour<\/br>Station: Bald Rock","County: Guysborough<\/br>Waterbody: Whitehead Harbour<\/br>Station: Burnt Island","County: Guysborough<\/br>Waterbody: Whitehead Harbour<\/br>Station: Fishermans Island","County: Guysborough<\/br>Waterbody: Whitehead Harbour<\/br>Station: Northeast Branch","County: Guysborough<\/br>Waterbody: Whitehead Harbour<\/br>Station: Northwest Branch","County: Guysborough<\/br>Waterbody: Whitehead Harbour<\/br>Station: The Basin","County: Guysborough<\/br>Waterbody: Whitehead Harbour<\/br>Station: White Island","County: Guysborough<\/br>Waterbody: Whitehead Harbour<\/br>Station: Yankee Cove","County: Guysborough<\/br>Waterbody: Wine Harbour<\/br>Station: Wine Harbour","County: Halifax<\/br>Waterbody: Beaver Harbour<\/br>Station: Beaver Point","County: Halifax<\/br>Waterbody: Owls Head Bay<\/br>Station: Owls Head","County: Halifax<\/br>Waterbody: Shad Bay<\/br>Station: Shad Bay","County: Halifax<\/br>Waterbody: Sheet Harbour<\/br>Station: East Gibbs Island","County: Halifax<\/br>Waterbody: Shoal Bay<\/br>Station: Borgles Island","County: Halifax<\/br>Waterbody: Sober Island Pond<\/br>Station: Sober Island","County: Halifax<\/br>Waterbody: Spry Bay<\/br>Station: Spry Harbour","County: Halifax<\/br>Waterbody: St. Margarets Bay<\/br>Station: Shut-In Island","County: Inverness<\/br>Waterbody: Strait of Canso<\/br>Station: Pulp Mill","County: Inverness<\/br>Waterbody: Whycocomagh Bay<\/br>Station: Aberdeen","County: Lunenburg<\/br>Waterbody: Mahone Bay<\/br>Station: Flat Island","County: Lunenburg<\/br>Waterbody: Mahone Bay<\/br>Station: Little Rafuse Island","County: Lunenburg<\/br>Waterbody: Mahone Bay<\/br>Station: Snake Island","County: Lunenburg<\/br>Waterbody: Mahone Bay<\/br>Station: Upper Blandford","County: Lunenburg<\/br>Waterbody: St. Margarets Bay<\/br>Station: Birchy Head","County: Lunenburg<\/br>Waterbody: St. Margarets Bay<\/br>Station: Tilley Point","County: Pictou<\/br>Waterbody: Little Harbour<\/br>Station: Melmerby Beach","County: Pictou<\/br>Waterbody: Merigomish Harbour<\/br>Station: Olding Island","County: Pictou<\/br>Waterbody: Piper Lake<\/br>Station: Piper Lake","County: Queens<\/br>Waterbody: Liverpool Bay<\/br>Station: Mersey Point","County: Richmond<\/br>Waterbody: Arichat Harbour<\/br>Station: 0667","County: Richmond<\/br>Waterbody: Arichat Harbour<\/br>Station: 0716 Center","County: Richmond<\/br>Waterbody: Arichat Harbour<\/br>Station: Cape Auguet","County: Richmond<\/br>Waterbody: Arichat Harbour<\/br>Station: Eastern Passage","County: Richmond<\/br>Waterbody: Arichat Harbour<\/br>Station: Kavanagh Point","County: Richmond<\/br>Waterbody: Bay of Rocks<\/br>Station: Les Rochers","County: Richmond<\/br>Waterbody: Lennox Passage<\/br>Station: Gabion Shoal","County: Richmond<\/br>Waterbody: Little Harbour<\/br>Station: Red Point","County: Shelburne<\/br>Waterbody: Green Harbour<\/br>Station: Blue Island","County: Shelburne<\/br>Waterbody: Little Harbour<\/br>Station: Little Harbour","County: Shelburne<\/br>Waterbody: Negro Harbour<\/br>Station: Ingomar","County: Shelburne<\/br>Waterbody: Port La Tour<\/br>Station: Taylors Rock","County: Yarmouth<\/br>Waterbody: Lobster Bay<\/br>Station: Lobster Bay","County: Yarmouth<\/br>Waterbody: Lobster Bay<\/br>Station: Morris Island","County: Yarmouth<\/br>Waterbody: Lobster Bay<\/br>Station: Old Point Channel","County: Yarmouth<\/br>Waterbody: Lobster Bay<\/br>Station: Ram Island","County: Yarmouth<\/br>Waterbody: Lobster Bay<\/br>Station: Tucker Island","County: Yarmouth<\/br>Waterbody: Lobster Bay<\/br>Station: Wedgeport","County: Yarmouth<\/br>Waterbody: Salt Bay<\/br>Station: Big Sluice"],null,null,null,null,{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},null]}],"limits":{"lat":[43.46887,45.976083],"lng":[-66.224861,-60.7611]}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-0edaf1d0333768a0a20f" style="width:1080px;height:403.2px;" class="leaflet html-widget"></div>
+<script type="application/json" data-for="htmlwidget-0edaf1d0333768a0a20f">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addProviderTiles","args":["CartoDB.Positron",null,null,{"errorTileUrl":"","noWrap":false,"detectRetina":false}]},{"method":"addMarkers","args":[[44.634167,44.669583,44.66939,44.6782,45.6598,45.675,45.654886,45.78334450726,44.32794,44.41007,44.539117,44.503833,44.5328,44.324017,44.32015,44.401726,44.35062,44.333112,44.35013,44.485671,45.40052,45.35078,45.3586,45.35493,45.16005,45.26751,45.25846,45.10312,45.08461,44.94988,45.15527,45.52511,45.58928,45.23018,45.22564,45.25007,45.20768,45.24929,45.19943,45.25545,45.24045,45.27063,45.28693,45.23757,45.24709,45.23375,45.07278,44.87761,44.73416,44.50116,44.83858,44.77437,44.838781,44.81769,44.55768,45.59586275,45.976083,44.43346,44.43843,44.54357,44.50889,44.57130379,44.5483,45.65,45.644,45.34641,44.02611,45.4934062203816,45.50135,45.49824,45.49028,45.49823692,45.52904,45.6026,45.56094,43.68621,43.7169,43.52369502,43.46887,43.67902,43.79075,43.7210203567927,43.68447,43.7160798954253,43.69405,43.8144],[-65.711933,-65.647733,-65.64479,-65.68329,-61.904158,-61.908,-61.828774,-63.2251923345618,-65.92824,-65.996999,-65.957983,-65.932367,-65.98404,-66.135683,-66.135067,-66.159589,-66.224861,-66.202076,-66.2243,-66.059566,-61.42225,-61.26832,-61.4208,-61.03793,-61.68007,-60.97922,-60.9998,-61.63028,-61.82237,-62.01012,-61.39867,-61.25595,-61.37928,-61.25339,-61.2961,-61.29866,-61.35319,-61.14684,-61.191,-61.14594,-61.16833,-61.135,-61.16842,-61.14947,-61.15647,-61.15836,-61.8605,-62.39922,-62.81035,-63.81413,-62.51107,-62.72518,-62.471151,-62.62061,-63.95343,-61.36382192,-61.022683,-64.1312,-64.25006,-64.17342,-64.13291,-64.03512147,-64.01741,-62.525,-62.468,-62.66088,-64.66574,-61.0194651783081,-61.04197,-61.0913,-61.03831,-61.01930751,-60.92601,-60.90244,-60.7611,-65.16825,-65.008796,-65.35572913,-65.43173,-65.89818,-65.91163,-65.8457420580702,-65.83601,-65.9426905867326,-65.95942,-65.9137],null,null,null,{"interactive":true,"draggable":false,"keyboard":true,"title":"","alt":"","zIndexOffset":0,"opacity":1,"riseOnHover":false,"riseOffset":250},["County: Annapolis<\/br>Waterbody: Annapolis Basin<\/br>Station: 5005","County: Annapolis<\/br>Waterbody: Annapolis Basin<\/br>Station: 5006","County: Annapolis<\/br>Waterbody: Annapolis Basin<\/br>Station: Cornwallis","County: Annapolis<\/br>Waterbody: Annapolis Basin<\/br>Station: Lobster Ledge","County: Antigonish<\/br>Waterbody: Antigonish Harbour<\/br>Station: Southside","County: Antigonish<\/br>Waterbody: Grahams Cove<\/br>Station: Captains Pond","County: Antigonish<\/br>Waterbody: Monks Head Harbour<\/br>Station: Monks Head","County: Colchester<\/br>Waterbody: Tatamagouche Bay<\/br>Station: Malagash","County: Digby<\/br>Waterbody: Hourglass Lake<\/br>Station: Hourglass Lake","County: Digby<\/br>Waterbody: Sissiboo River<\/br>Station: Sissiboo","County: Digby<\/br>Waterbody: St. Mary's Bay<\/br>Station: 5007","County: Digby<\/br>Waterbody: St. Mary's Bay<\/br>Station: 5008","County: Digby<\/br>Waterbody: St. Mary's Bay<\/br>Station: Centreville","County: Digby<\/br>Waterbody: St. Mary's Bay<\/br>Station: Church Point 1","County: Digby<\/br>Waterbody: St. Mary's Bay<\/br>Station: Church Point 2","County: Digby<\/br>Waterbody: St. Mary's Bay<\/br>Station: Long Beach","County: Digby<\/br>Waterbody: St. Mary's Bay<\/br>Station: Long Island 1","County: Digby<\/br>Waterbody: St. Mary's Bay<\/br>Station: Long Island 2","County: Digby<\/br>Waterbody: St. Mary's Bay<\/br>Station: Long Island","County: Digby<\/br>Waterbody: St. Mary's Bay<\/br>Station: Sandy Cove St. Mary's","County: Guysborough<\/br>Waterbody: Chedabucto Bay<\/br>Station: Moose Point","County: Guysborough<\/br>Waterbody: Chedabucto Bay<\/br>Station: Rook Island","County: Guysborough<\/br>Waterbody: Chedabucto Bay<\/br>Station: Sandy Cove Chedabucto","County: Guysborough<\/br>Waterbody: Chedabucto Bay<\/br>Station: Tickle Island","County: Guysborough<\/br>Waterbody: Country Harbour<\/br>Station: 1307","County: Guysborough<\/br>Waterbody: Dover Bay<\/br>Station: Madeline Point","County: Guysborough<\/br>Waterbody: Dover Bay<\/br>Station: Seal Cove","County: Guysborough<\/br>Waterbody: Fishermans Harbour<\/br>Station: Meal Rock","County: Guysborough<\/br>Waterbody: Indian Harbour<\/br>Station: Barachois","County: Guysborough<\/br>Waterbody: Marie Joseph Harbour<\/br>Station: Barren Island","County: Guysborough<\/br>Waterbody: New Harbour<\/br>Station: The Bull","County: Guysborough<\/br>Waterbody: Strait of Canso<\/br>Station: Eddy Cove","County: Guysborough<\/br>Waterbody: Strait of Canso<\/br>Station: Pirate Harbour","County: Guysborough<\/br>Waterbody: Tor Bay<\/br>Station: Tanner Island","County: Guysborough<\/br>Waterbody: Tor Bay<\/br>Station: Center Bay","County: Guysborough<\/br>Waterbody: Tor Bay<\/br>Station: English Harbour","County: Guysborough<\/br>Waterbody: Tor Bay<\/br>Station: Larry's River","County: Guysborough<\/br>Waterbody: Whitehead Harbour<\/br>Station: The Channel","County: Guysborough<\/br>Waterbody: Whitehead Harbour<\/br>Station: Bald Rock","County: Guysborough<\/br>Waterbody: Whitehead Harbour<\/br>Station: Burnt Island","County: Guysborough<\/br>Waterbody: Whitehead Harbour<\/br>Station: Fishermans Island","County: Guysborough<\/br>Waterbody: Whitehead Harbour<\/br>Station: Northeast Branch","County: Guysborough<\/br>Waterbody: Whitehead Harbour<\/br>Station: Northwest Branch","County: Guysborough<\/br>Waterbody: Whitehead Harbour<\/br>Station: The Basin","County: Guysborough<\/br>Waterbody: Whitehead Harbour<\/br>Station: White Island","County: Guysborough<\/br>Waterbody: Whitehead Harbour<\/br>Station: Yankee Cove","County: Guysborough<\/br>Waterbody: Wine Harbour<\/br>Station: Wine Harbour","County: Halifax<\/br>Waterbody: Beaver Harbour<\/br>Station: Beaver Point","County: Halifax<\/br>Waterbody: Owls Head Bay<\/br>Station: Owls Head","County: Halifax<\/br>Waterbody: Shad Bay<\/br>Station: Shad Bay","County: Halifax<\/br>Waterbody: Sheet Harbour<\/br>Station: East Gibbs Island","County: Halifax<\/br>Waterbody: Shoal Bay<\/br>Station: Borgles Island","County: Halifax<\/br>Waterbody: Sober Island Pond<\/br>Station: Sober Island","County: Halifax<\/br>Waterbody: Spry Bay<\/br>Station: Spry Harbour","County: Halifax<\/br>Waterbody: St. Margarets Bay<\/br>Station: Shut-In Island","County: Inverness<\/br>Waterbody: Strait of Canso<\/br>Station: Pulp Mill","County: Inverness<\/br>Waterbody: Whycocomagh Bay<\/br>Station: Aberdeen","County: Lunenburg<\/br>Waterbody: Mahone Bay<\/br>Station: Flat Island","County: Lunenburg<\/br>Waterbody: Mahone Bay<\/br>Station: Little Rafuse Island","County: Lunenburg<\/br>Waterbody: Mahone Bay<\/br>Station: Snake Island","County: Lunenburg<\/br>Waterbody: Mahone Bay<\/br>Station: Upper Blandford","County: Lunenburg<\/br>Waterbody: St. Margarets Bay<\/br>Station: Birchy Head","County: Lunenburg<\/br>Waterbody: St. Margarets Bay<\/br>Station: Tilley Point","County: Pictou<\/br>Waterbody: Little Harbour<\/br>Station: Melmerby Beach","County: Pictou<\/br>Waterbody: Merigomish Harbour<\/br>Station: Olding Island","County: Pictou<\/br>Waterbody: Piper Lake<\/br>Station: Piper Lake","County: Queens<\/br>Waterbody: Liverpool Bay<\/br>Station: Mersey Point","County: Richmond<\/br>Waterbody: Arichat Harbour<\/br>Station: 0667","County: Richmond<\/br>Waterbody: Arichat Harbour<\/br>Station: 0716 Center","County: Richmond<\/br>Waterbody: Arichat Harbour<\/br>Station: Cape Auguet","County: Richmond<\/br>Waterbody: Arichat Harbour<\/br>Station: Eastern Passage","County: Richmond<\/br>Waterbody: Arichat Harbour<\/br>Station: Kavanagh Point","County: Richmond<\/br>Waterbody: Bay of Rocks<\/br>Station: Les Rochers","County: Richmond<\/br>Waterbody: Lennox Passage<\/br>Station: Gabion Shoal","County: Richmond<\/br>Waterbody: Little Harbour<\/br>Station: Red Point","County: Shelburne<\/br>Waterbody: Green Harbour<\/br>Station: Blue Island","County: Shelburne<\/br>Waterbody: Little Harbour<\/br>Station: Little Harbour","County: Shelburne<\/br>Waterbody: Negro Harbour<\/br>Station: Ingomar","County: Shelburne<\/br>Waterbody: Port La Tour<\/br>Station: Taylors Rock","County: Yarmouth<\/br>Waterbody: Lobster Bay<\/br>Station: Lobster Bay","County: Yarmouth<\/br>Waterbody: Lobster Bay<\/br>Station: Morris Island","County: Yarmouth<\/br>Waterbody: Lobster Bay<\/br>Station: Old Point Channel","County: Yarmouth<\/br>Waterbody: Lobster Bay<\/br>Station: Ram Island","County: Yarmouth<\/br>Waterbody: Lobster Bay<\/br>Station: Tucker Island","County: Yarmouth<\/br>Waterbody: Lobster Bay<\/br>Station: Wedgeport","County: Yarmouth<\/br>Waterbody: Salt Bay<\/br>Station: Big Sluice"],null,null,null,null,{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},null]}],"limits":{"lat":[43.46887,45.976083],"lng":[-66.224861,-60.7611]}},"evals":[],"jsHooks":[]}</script>
 
 ???
 
@@ -166,9 +154,6 @@ $$
 
 ]
 ]
-
-
-
 
 ---
 class: center
@@ -188,8 +173,39 @@ Apply TGC Model
 - Season start: temperature crosses the 4-degree trending up threshold
 - Season end: before temperature crosses superchill threshold OR after 18 months
 
+.panelset[
+
+.panel[.panel-name[Beaver Point]
+&lt;img src="index_files/figure-html/unnamed-chunk-5-1.png" width="1080" /&gt;
+]
+
+.panel[.panel-name[Season Table]
+
+<div id="htmlwidget-97c9eda7b810f0f83a1a" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-97c9eda7b810f0f83a1a">{"x":{"filter":"none","vertical":false,"data":[["Madeline Point","Madeline Point","Madeline Point","Madeline Point","Madeline Point","Beaver Point","Beaver Point","Beaver Point","Beaver Point","Flat Island","Flat Island","Flat Island","Flat Island","Flat Island"],["2","5","10","15","22","2","5","10","15","2","5","10","15","20"],["2019-06-17","2019-06-17","2019-06-22","2019-06-22","2019-06-23","2018-05-21","2018-05-27","2018-05-31","2018-07-11","2019-05-01","2019-05-08","2019-05-19","2019-05-19","2019-06-19"],["2020-02-15","2020-02-22","2020-02-22","2020-02-15","2020-02-15","2019-02-22","2019-02-22","2019-02-22","2019-01-20","2020-10-22","2020-10-29","2020-11-09","2020-11-09","2020-12-10"],[243.02,249.6,244.45,237.59,236.42,276.3,271.16,267.48,193.08,540,540,540,539.99,540]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>STATION<\/th>\n      <th>DEPTH<\/th>\n      <th>START_SEASON<\/th>\n      <th>END_SEASON<\/th>\n      <th>STOCKED_DAYS<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"ft","paging":false,"searching":true,"scrollY":"225px","scrollX":"500px","pageLength":500,"columnDefs":[{"className":"dt-center","targets":"_all"}],"order":[],"autoWidth":false,"orderClasses":false,"lengthMenu":[10,25,50,100,500]}},"evals":[],"jsHooks":[]}</script>
+
+]
+]
 
 
+
+
+
+---
+
+# Choose Example Stations
+
+.pull-left[
+- 3 examples  
+  - Short season (&lt; 8.5 months)
+  - Medium season (8.5 - 17 months)
+  - Long season ($\ge$ 17 months)
+
+- Data gaps &lt; 2 days
+- At least 3 depths (2 m, 5 m, 10 m)
+]
+
+.pull-right[
 
 
 

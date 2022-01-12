@@ -68,7 +68,7 @@ dt_options <- list(
       dom = 'ft',
       paging = FALSE,
       searching = TRUE,
-      scrollY = "500px",
+      scrollY = "225px",
       scrollX = "500px",
       pageLength = 500,
       columnDefs = list(list(className = 'dt-center', targets = "_all"))
@@ -76,12 +76,11 @@ dt_options <- list(
 
 theme_set(theme_light())
 
-st_dat <- FALSE
+st_dat <- TRUE
 
 ```
 
-```{r, echo=FALSE, eval=st_dat}
-
+```{r raw-data, echo=FALSE, eval=st_dat}
 # import data
 dat_raw <- import_strings_data(
   add_county_col = FALSE,
@@ -101,8 +100,46 @@ dat_raw <- import_strings_data(
       STATION, levels = c("Madeline Point", "Beaver Point", "Flat Island")
     )
   )
+```
+
+
+```{r analysis, echo=FALSE, warning=FALSE, eval=TRUE}
 
 colour_pal <- get_colour_palette(dat_raw)
+
+# CAN send this to count_degree_days() (but NOT if heat stress events are filtered)
+dat_seasons <-  dat_raw %>% 
+  filter_in_growing_seasons() %>% 
+  filter(
+    (STATION == "Flat Island" & SEASON == "S3") |
+      (STATION == "Beaver Point" & SEASON == "S2") |
+      (STATION == "Madeline Point" & SEASON == "S2")
+  ) 
+
+# check for data gaps 
+# gap_table <- dat_seasons %>% 
+#   check_for_data_gaps(STATION) %>% 
+#   arrange(STATION, DEPTH) %>% 
+#   group_by(STATION, DEPTH) %>%
+#   summarize(TOTAL_GAP_DAYS = sum(GAP_LENGTH_DAYS)) %>%
+#   ungroup()
+
+# degree days
+dd <- count_degree_days(dat_seasons, STATION, rm_gap_days = FALSE) %>% 
+  select(-SEASON, -n_OBSERVATIONS) %>% 
+  relocate(AVG_TEMPERATURE, .before = n_degree_days)
+
+# TGC model
+# w_t <- 5.5
+# tgc <- c(0.25, 0.3, 0.35)
+# 
+# tgc_table <- TGC_calculate_initial_weight(dd, final_weight = w_t, tgc = tgc) %>%
+#   arrange(STATION, DEPTH) %>% 
+#  select(-FINAL_WEIGHT)
+
+# # filter out heat stress events for plotting (do NOT send this to count_dd)
+# dat_filt <- dat_seasons %>% 
+#   filter_out_heat_stress_events() 
 
 ```
 
@@ -217,7 +254,7 @@ p
 .panelset[
 
 .panel[.panel-name[Flat Island]
-```{r, echo=FALSE, fig.height=5.5, eval=st_dat}
+```{r, echo=FALSE, fig.height=5.5, eval=FALSE}
 
 p <- dat_raw %>% 
   filter(STATION == "Flat Island") %>% 
@@ -233,7 +270,7 @@ p
 ]
 
 .panel[.panel-name[Beaver Point]
-```{r, echo=FALSE, fig.height=5.5, eval=st_dat}
+```{r, echo=FALSE, fig.height=5.5, eval=FALSE}
 
 p <- dat_raw %>% 
   filter(STATION == "Beaver Point") %>% 
@@ -249,9 +286,6 @@ p
 ```
 ]
 ]
-
-`r knitr::knit_exit()`
-
 
 ---
 class: center
@@ -268,23 +302,44 @@ Apply TGC Model
 ---
 # Identify Growing Seasons
 
-.pull-left[
-Season start: temperature crosses the 4-degree trending up threshold
+- Season start: temperature crosses the 4-degree trending up threshold
+- Season end: before temperature crosses superchill threshold OR after 18 months
 
-```{r, echo=FALSE}
+.panelset[
 
-dat_raw %>% 
+.panel[.panel-name[Beaver Point]
+```{r, echo=FALSE, fig.height=4.7}
+
+dat_seasons %>% 
   filter(STATION == "Beaver Point") %>% 
-  filter_in_growing_seasons() %>% 
-  plot_temperature_at_depth(facet_var = "SEASON")
+  plot_temperature_at_depth(legend_drop = TRUE,
+                            date_breaks_major = "2 month",
+                            date_labels_format = "%Y-%b-%d") +
+  theme(text = element_text(size = 16))
 
 ```
 ]
 
-.pull-right[
-Season end: before temperature crosses superchill threshold OR after 18 months
+.panel[.panel-name[Season Table]
+
+```{r}
+
+dd %>% 
+  select(STATION, DEPTH, START_SEASON, END_SEASON, STOCKED_DAYS) %>% 
+  mutate(
+    START_SEASON = format(as_date(START_SEASON)),
+    END_SEASON = format(as_date(END_SEASON))
+  ) %>% 
+  arrange(STATION) %>% 
+  datatable(rownames = FALSE, options = dt_options)
+
+```
+
+]
 ]
 
+
+`r knitr::knit_exit()`
 
 
 ---
