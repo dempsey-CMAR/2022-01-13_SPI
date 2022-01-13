@@ -1,7 +1,7 @@
 ---
 title: "Application of coastal temperature regimens to inform selection of year-round & seasonal sites for <br/> Atlantic salmon culture"
 subtitle: ""
-author: "Danielle Dempsey, Gregor Reid, Ryan Horricks, Leah Lewis-McCrea, Toby Balch, Andre Dumas, Jack Rensel, Roland Cusack"
+author: "Danielle Dempsey, Gregor Reid, Ryan Horricks, <br/>Leah Lewis-McCrea, Toby Balch, Andre Dumas, Jack Rensel, Roland Cusack"
 date: "SPI: `r Sys.Date()`"
 output:
   xaringan::moon_reader:
@@ -143,7 +143,7 @@ dat_filt <- dat_seasons %>%
 
 ```
 
-class: center
+class: center, middle
 # **MOTIVATION & BACKGROUND**
 
 ???
@@ -161,14 +161,18 @@ class: center
 ---
 # Motivation
 
-- Recent trend in Atlantic salmon aquaculture to stock large post-smolts (~ 1 kg) 
+- Recent trend in Atlantic salmon aquaculture to stock large post-smolts (~ 1 kg)
+
+  - Proposed land-based facilities in Nova Scotia that could grow post-smolts up to 1.5 kg
 --
+
 
 - Mainly to reduce disease potential 
 --
 
 - Could also enable net pen grow-out to market size in less than a year
 --
+
 
 .pull-center[
 **Potential for novel sites in areas previously considered unsuitable for aquaculture**
@@ -179,7 +183,7 @@ class: center
 
 - Typically this happens when the smolt are about 100 to 150 g
 
-- There has been a recent trend in the industry to stock post-smolts that are closer to 500 g or even a full 1 kg.
+- There has been a recent trend in the industry to stock post-smolts that are closer to 500 g or even a full 1 kg. There are proposed land-based facilities in NS that could grow post-smolts up to 1.5 kg
 
 - This strategy has primarily been implemented to reduce disease potential, and has also been used to reduce grow-out time.
 
@@ -195,7 +199,6 @@ Norway:
 Prior to January 2013, the maximum allowable juvenile weight was 250 g. In January 2013, this value was changed to 1 kg, increasing the flexibility of the production process. 
 
 - Larger smolts are increasingly popular in Norway, where licences for extra biomass are limited and expensive, in Tasmania, and to an increasing extent in Scotland.
-
 
 ---
 # How big does a post-smolt salmon need to be <br/> to grow to market size at a given location?
@@ -285,11 +288,7 @@ dat_raw %>%
                             superchill_threshold = -Inf,
                             trend_threshold = NULL,
                             legend_drop = TRUE) +
-  plot_theme +
-  theme(
-    axis.title = element_text(size = 16),
-    legend.text = element_text(size = 16)
-  )
+  plot_theme 
   
 ```
 ]
@@ -306,7 +305,7 @@ dat_raw %>%
 - Nearly 4 years of data for 4 different depths
 
 ---
-class: center
+class: center, middle
 # **ANALYSIS & RESULTS**
 
 ???
@@ -546,12 +545,13 @@ dd %>%
 ---
 # Degree Days
 
-$$degreedays = T_{Avg} * n_{days}$$
+- $degreedays = T_{Avg} * n_{days}$
+
 .panelset[
 
 .panel[.panel-name[Figure]
 
-```{r, echo=FALSE, fig.height=4.7}
+```{r, echo=FALSE, fig.height=5}
 
 p <- ggplot(dd, aes(STATION, n_degree_days, fill = DEPTH,
                     text = paste(
@@ -652,28 +652,65 @@ ggplotly(p, tooltip = "text") %>%
 ```
 
 ???
+- depends on the TGC value assumed and in some cases the depth
+- if we take a look at Madeline Point, our shortest season, assuming a fast-growing stock, a 1.5 kg smolt could grow out to market size in just over 8 months.
 
+- For Beaver Point, 0.9 - 1.5 kg smolts could grow out to market size in the 9 month season
+
+- And for Flat Island, our longest season with lots of growing days, we could have much smaller smolts.
 
 ---
 # Discussion
 
+.pull-left[
+**Inter-annual variability**
+- Season start, superchill & heat stress
+- Operators want 6+ years of data 
+]
+.pull-right[
+**Assumptions**
+- Fish stay at one depth for whole season
+- Heat stress thresholds
+]
 
+```{r, echo=FALSE, fig.height=4.5, eval=TRUE}
+dat_raw %>% 
+  filter(STATION == "Beaver Point") %>% 
+  plot_temperature_at_depth(legend_drop = TRUE) +
+  plot_theme 
+```
 
+???
+Inter-annual variability
+- Examples from just 1 season at three different sites - not representative of every year at a give site or of any particular region
+- We have nearly 4 years of data for some sites, so one thing I'm excited to start doing is to explore this variability to get a better sense of timing of season start and superchill, and spatial correlations.
+- Operators that they want at least 6 years of data before they make decisions
 
+Assumptions
+- Modelling study
+(e.g., fish stay at one depth for the season, heat stress)
+- Perfect knowledge of the exact best time to put fish in and take them out
 
+---
+class: center, middle
+**Future investigations into seasonal sites in Nova Scotia are warranted!**
+
+???
+- Even shortest season (<8.5 months) showed could grow out to market size with 1.5 kg super-smolts (say on previous slide??)
+
+---
+class: center, middle
+**Danielle Dempsey**
+
+**ddempsey@perennia.ca**
 
 ???
 - Thanks to Bruce/Gregor for giving me a chance to tell you about this work
 - Questions
-- Hot off the press!
-
 
 ---
-# Next Steps
-
-
----
-# Extra Slides
+class: center, middle
+# EXTRA SLIDES
 
 ---
 # Thermal Growth Coefficient Model
@@ -749,6 +786,6 @@ leaflet(dat_map) %>%
 
 ```
 
-`r knitr::knit_exit()`
 
+`r knitr::knit_exit()`
 
