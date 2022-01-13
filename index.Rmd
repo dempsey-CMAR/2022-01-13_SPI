@@ -151,24 +151,23 @@ class: center, middle
 - For those of you I haven't met, my name is Danielle Dempsey. I am the Research Fellow in Coastal Oceanography at CMAR.
 - Today I'm going to tell you about a paper that Gregor and I and some other folks have been working on.
 - The title is kind of a mouthful:
-- This is the first time we've shared these results, so they are "hot off the press" and may change a little as we get feedback from folks like yourselves, but I definitely think it's worth sharing at this stage. 
+- This work is hot off the press - this is the first time we've shared these results, so I'm looking forward to showing you and getting some feedback at the end.
 
 **
-- I'll start with discussing the motivation for the paper, and then talk about the model we used before jumping into the analysis and results.
+- I'll start at the beginning with the motivation for the paper
 
 - As you know, cultured salmon are grown on land in fresh water for the first part of their life, and then transferred to salt water farms when they become smolt.
 
 ---
 # Motivation
 
+- Cultured salmon are transferred from land to net pens when they become smolts (~150 g)
+
 - Recent trend in Atlantic salmon aquaculture to stock large post-smolts (~ 1 kg)
 
   - Proposed land-based facilities in Nova Scotia that could grow post-smolts up to 1.5 kg
---
-
 
 - Mainly to reduce disease potential 
---
 
 - Could also enable net pen grow-out to market size in less than a year
 --
@@ -179,21 +178,18 @@ class: center, middle
 ]
 
 ???
-- As you know, cultured salmon are grown on land in fresh water for the first part of their life, and then transferred to salt water farms when they become smolt.
+- As you know, cultured salmon are grown in land-based facilities in fresh water for the first part of their life, and then transferred to salt water farms when they become smolt.
 
-- Typically this happens when the smolt are about 100 to 150 g
+- Typically this happens when the fish are about 100 to 150 g
 
-- There has been a recent trend in the industry to stock post-smolts that are closer to 500 g or even a full 1 kg. There are proposed land-based facilities in NS that could grow post-smolts up to 1.5 kg
+- There has been a recent trend in the industry to stock post-smolts that are closer to 500 g or even a full 1 kg. There proposed facilities in NS with the potential to grow post-smolts on land up to 1.5 kg
 
-- This strategy has primarily been implemented to reduce disease potential, and has also been used to reduce grow-out time.
+- This large post-smolt stocking strategy has primarily been implemented to reduce disease potential
 
-- Depending on local temperature and initial fish size, large post-smolt stocking could enable grow-out to target market weights in less than a year
+- Depending on local temperature and initial fish size, large post-smolt stocking could enable net pen grow-out to market size in less than a year
 
-- Which could open up novel sites in areas that are typically considered unsuitable for aquaculture because they experience seasonal superchill.
+- Which could open up novel sites in areas that were previously considered unsuitable for aquaculture, for example because they experience seasonal superchill.
 
-
-
-- Smoltification is when salmon change lifestages from being “parr” in freshwater to “smolts” adapted to saltwater.
 
 Norway:
 Prior to January 2013, the maximum allowable juvenile weight was 250 g. In January 2013, this value was changed to 1 kg, increasing the flexibility of the production process. 
@@ -297,7 +293,7 @@ dat_raw %>%
 ???
 - Here is an example of temperature data from Flat Island in Lunenburg County, just outside of Mahone Bay.
 - This is data for about 3.5 years, from May 2018 to November 2021
-- There are 5 different depths, represented by colour
+- Temperaure was measured by sensors at 5 different depths, represented by colour
 - You can see the temperature is pretty well stratified in the summmer months, but is much more well mixed in the winter.
 
 - Just another quick example. 
@@ -357,19 +353,17 @@ dd %>%
 ]
 
 ???
-- The first thing I did was tell the code to look through all the temperature data from all of the locations we just saw and assign growing seasons, i.e., a date when fish could theoretically be put into the water, and when they would be removed.
-- Based on advice provided by Roland, the season starts when the temperature exceeds the 4-degree threshold, which is marked by the dashed grey line in the figure, and doesn't go back down below it, 
+- The first thing I did was tell the code to look through all the temperature data from all of the 86 locations we just saw and assign growing seasons, i.e., a date when fish could theoretically be put into the water, and when they would be removed.
+- This figure shows one season of data for Beaver Point.
+- Based on advice provided by Roland, each season starts when the temperature exceeds 4-degree and doesn't go back down below it.
+- 4-degree threshold is marked in dotted grey line
+- In this example...
 - The season ends at the first observation before superchill, which is indicated by the blue shaded region.
 - If there is no superchill, then the season ends after 18 months
 
+- In this table, we can get a more detailed sense of when the season starts and ends, and the theoretical number of stocked days.
+- So at the 2 m depth, fish could be stock for 276 days, but down at 15 m this is reduced to 193 days
 
-- This figure shows one season of data for Beaver Point.
-
-- I realize that it is not 
-
-- Obviously it is much easier to define the seasons this way in retrospect  
-
-- did this for all stations + depths
 
 ---
 
@@ -430,6 +424,8 @@ p
 
 - At the end of this exercise, I chose Flat Island to represent a long season, Beaver Point for a medium season, and Madeline Point as a short season
 
+- No superchill at Flat Island
+
 ---
 # Growing Days
 
@@ -444,50 +440,36 @@ n_days <- 14
 short_filt <- dat_filt %>%
   filter(STATION == "Madeline Point")
 
-min1 <- min(short_filt$TIMESTAMP) - days(n_days)
-max1 <- max(short_filt$TIMESTAMP) + days(n_days)
-
-short_raw <- dat_raw %>% 
-  filter(STATION == "Madeline Point",
-         TIMESTAMP >= min1, TIMESTAMP <= max1)
-
-p1 <- plot_filtered_data(short_raw, short_filt,
-                         date_breaks_major = "1 month",
-                         date_labels_format = "%Y-%b") +
+p1 <- dat_seasons %>% 
+  filter(STATION == "Madeline Point") %>% 
+  select(-SEASON) %>% 
+  plot_filtered_data(short_filt,
+                     date_breaks_major = "1 month",
+                     date_labels_format = "%Y-%b") +
   plot_theme
 
 #############
 med_filt <- dat_filt %>%
   filter(STATION == "Beaver Point")
 
-min2 <- min(med_filt$TIMESTAMP) - days(n_days)
-max2 <- max(med_filt$TIMESTAMP) + days(n_days)
-
-med_raw <- dat_raw %>% 
-  filter(STATION == "Beaver Point",
-         TIMESTAMP >= min2, TIMESTAMP <= max2)
-
-p2 <- plot_filtered_data(med_raw, med_filt,
-                         date_breaks_major = "1 month",
-                         date_labels_format = "%Y-%b", 
-                         plotly_friendly = FALSE) +
+p2 <- dat_seasons %>% 
+  filter(STATION == "Beaver Point") %>% 
+  select(-SEASON) %>% 
+  plot_filtered_data(med_filt,
+                     date_breaks_major = "1 month",
+                     date_labels_format = "%Y-%b") +
   plot_theme
 
 #############
 long_filt <- dat_filt %>%
   filter(STATION == "Flat Island")
 
-min3 <- min(long_filt$TIMESTAMP) - days(n_days)
-max3 <- max(long_filt$TIMESTAMP) + days(n_days)
-
-long_raw <- dat_raw %>% 
-  filter(STATION == "Flat Island",
-         TIMESTAMP >= min3, TIMESTAMP <= max3)
-
-p3 <- plot_filtered_data(long_raw, long_filt,
-                         date_breaks_major = "2 month",
-                         date_labels_format = "%Y-%b", 
-                         plotly_friendly = FALSE) +
+p3 <- dat_seasons %>% 
+  filter(STATION == "Flat Island") %>% 
+  select(-SEASON) %>% 
+  plot_filtered_data(long_filt,
+                     date_breaks_major = "2 month",
+                     date_labels_format = "%Y-%b") +
   plot_theme
 
 ```
@@ -535,12 +517,15 @@ dd %>%
 ]
 
 ???
-- The next step was to calculate the number of growing days at each station, for the degree-day calculation
-- We assumed that there would be no growth for 24 hours after the temperature exceeded 18 degrees Celcius, as illustrated in this figure.
+- The next step was to calculate the number of growing days at each station and depth, for the degree-day calculation
+- We assumed that there would be no growth for 24 hours after the temperature exceeded 18 degrees Celcius, due to heat stress. 
 
-- This is data from Madeline Point, our example of a short growing season. All of the observations greater than 18 degrees C, in the red part of the figure AND 24 hours after were filtered out of the analysis and not included in the average temperature OR number of degree days
+- As illustrated in this figure.
 
-- 31 days filtered out for 2 m depth; only 3.5 filtered out at 22 m
+- This is data from Beaver Point, our medium growing season. All of the observations greater than 18 degrees C, in  AND 24 hours after were filtered out of the analysis and not included in the average temperature OR number of growing days
+
+- 26 days filtered out for 2 m depth; only 5 filtered out at 15 m
+- Flat Island: Heat stress at 2 m
 
 ---
 # Degree Days
@@ -605,7 +590,11 @@ dd %>%
 ]
 
 ???
-Note: Partial STOCKED_DAYS caused by the times of END_SEASON and START_SEASON (not shown).
+- Very little variation at depth at Madeline Point because not a lot of stratifications
+- Same number of degree days for 5 and 10 m at Madeline Point and Beaver Point, even though Madeline Point season was about a month shorter
+- Because the average temperature was about a degree warmer at Madeline Point
+
+- Flat Island: fewer degree-days at 2 m than 5 or 10 m because of the heat stress we saw on the previous slide.
 
 ---
 # TGC Model Results
@@ -652,25 +641,31 @@ ggplotly(p, tooltip = "text") %>%
 ```
 
 ???
-- depends on the TGC value assumed and in some cases the depth
-- if we take a look at Madeline Point, our shortest season, assuming a fast-growing stock, a 1.5 kg smolt could grow out to market size in just over 8 months.
+- That brings us to our model results, and back to our original question of...
 
-- For Beaver Point, 0.9 - 1.5 kg smolts could grow out to market size in the 9 month season
+- This figure shows the model results, with a panel for each example station.
+
+- Recall we looked at three different TGC values, one for a slow growing stock, one for an average stock, and one for a fast growing stock
+
+- if we take a look at Madeline Point, our shortest season, assuming a fast-growing stock, a 1.5 kg smolt could theoretically grow out to market size in just over 8 months.
+
+- this was an exciting results, because as I mentioned at the beginning, there are proposed facilities in NS that could produce super smolts of this size
+
+- Results suggest that smolts around or below 1.5 kg could also grow to market size at the Beaver Point example
 
 - And for Flat Island, our longest season with lots of growing days, we could have much smaller smolts.
 
 ---
 # Discussion
-
 .pull-left[
-**Inter-annual variability**
-- Season start, superchill & heat stress
-- Operators want 6+ years of data 
-]
-.pull-right[
 **Assumptions**
 - Fish stay at one depth for whole season
-- Heat stress thresholds
+- Response to heat stress
+]
+.pull-right[
+**Inter-annual variability**
+- Examples from 1 season
+- Season start, superchill & heat stress
 ]
 
 ```{r, echo=FALSE, fig.height=4.5, eval=TRUE}
@@ -681,15 +676,17 @@ dat_raw %>%
 ```
 
 ???
-Inter-annual variability
-- Examples from just 1 season at three different sites - not representative of every year at a give site or of any particular region
-- We have nearly 4 years of data for some sites, so one thing I'm excited to start doing is to explore this variability to get a better sense of timing of season start and superchill, and spatial correlations.
-- Operators that they want at least 6 years of data before they make decisions
+- A lot of discussion we could have around the results and implications of this model
 
 Assumptions
-- Modelling study
-(e.g., fish stay at one depth for the season, heat stress)
-- Perfect knowledge of the exact best time to put fish in and take them out
+- Modelling study, as with any modelling study, there is a need to make assumptions
+- e.g., here we assumed fish stay at one depth for the season, and about how they react to heat stress
+- I think these are reasonable assumptions and that we can still learn from the results
+
+Inter-annual variability
+- Examples from just 1 season at three different sites - not representative of every year at a give site or of any particular region
+- We have nearly 4 years of data for some sites, so one thing I'm excited to start doing is to explore this variability to get a better sense of timing of season start and superchill, and how these timings are related spatially
+- Operators that they want at least 6 years of data before they make decisions
 
 ---
 class: center, middle
